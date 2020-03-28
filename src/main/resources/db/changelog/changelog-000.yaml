@@ -1,0 +1,160 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20200902-001
+      author: miguel
+      changes:
+        - createTable:
+            tableName: turno
+            columns:
+              - column:
+                  name: id
+                  type: long
+                  constraints:
+                    nullable: false
+              - column:
+                  name: medico_id
+                  type: long
+                  constraints:
+                    nullable: false
+              - column:
+                  name: paciente_id
+                  type: long
+                  constraints:
+                    nullable: true
+              - column:
+                  name: especialidad_id
+                  type: long
+                  constraints:
+                    nullable: false
+              - column:
+                  name: horario
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: confirmado
+                  type: boolean
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: medico
+            columns:
+              - column:
+                  name: id
+                  type: long
+                  constraints:
+                    nullable: false
+              - column:
+                  name: nombre
+                  type: varchar(55)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: documento
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: paciente
+            columns:
+              - column:
+                  name: id
+                  type: long
+                  constraints:
+                    nullable: false
+              - column:
+                  name: nombre
+                  type: varchar(55)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: documento
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: pagoAlDia
+                  type: boolean
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: especialidad
+            columns:
+              - column:
+                  name: id
+                  type: long
+                  constraints:
+                    nullable: false
+              - column:
+                  name: descripcion
+                  type: varchar(55)
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: medicoEspecialidad
+            columns:
+              - column:
+                  name: medico_id
+                  type: long
+                  constraints:
+                    nullable: false
+              - column:
+                  name: especialidad_id
+                  type: long
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseColumnNames: medico_id
+            baseTableName: turno
+            baseTableSchemaName: public
+            constraintName: fk_turno_medico
+            onDelete: NO ACTION
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: medico
+            referencedTableSchemaName: public
+            validate: true
+        - addForeignKeyConstraint:
+            baseColumnNames: paciente_id
+            baseTableName: turno
+            baseTableSchemaName: public
+            constraintName: fk_turno_paciente
+            onDelete: NO ACTION
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: paciente
+            referencedTableSchemaName: public
+            validate: true
+        - addForeignKeyConstraint:
+            baseColumnNames: especialidad_id
+            baseTableName: turno
+            baseTableSchemaName: public
+            constraintName: fk_turno_especialidad
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: especialidad
+            referencedTableSchemaName: public
+            validate: true
+        - addForeignKeyConstraint:
+            baseColumnNames: medico_id
+            baseTableName: medicoEspecialidad
+            baseTableSchemaName: public
+            constraintName: fk_medico_especialidad
+            onDelete: NO ACTION
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: medico
+            referencedTableSchemaName: public
+            validate: true
+        - addForeignKeyConstraint:
+            baseColumnNames: especialidad_id
+            baseTableName: medicoEspecialidad
+            baseTableSchemaName: public
+            constraintName: fk_especialidad_medico
+            onDelete: NO ACTION
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: especialidad
+            referencedTableSchemaName: public
+            validate: true

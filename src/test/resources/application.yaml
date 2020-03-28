@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    url: ${JDBC_DATABASE_URL:jdbc:h2:mem:}
+    hikari:
+      connection-timeout: 30000
+      maximum-pool-size: 10
