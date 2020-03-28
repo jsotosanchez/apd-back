@@ -6,40 +6,26 @@ import me.apd.entities.Especialidad;
 import me.apd.entities.Medico;
 import me.apd.entities.Turno;
 import me.apd.services.Agenda;
-import me.apd.services.EspecialidadService;
-import me.apd.services.Usuario;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequestMapping("/agenda")
 public class AgendaController {
     private final Agenda agendaService;
-    private final Usuario usuarioService;
-    private final EspecialidadService especialidadService;
 
-    public AgendaController(Agenda agenda, Usuario usuario, EspecialidadService especialidad) {
+    public AgendaController(Agenda agenda) {
         this.agendaService = agenda;
-        this.usuarioService = usuario;
-        this.especialidadService = especialidad;
     }
 
     @PostMapping("/")
     public TurnoView nuevoTurno(@RequestBody TurnoNuevoView turno) {
 
-        Medico medico = usuarioService.buscarMedicoPorId(turno.getMedicoId()).orElseThrow(
-                IllegalArgumentException::new
-        );
-        Especialidad especialidad = especialidadService.buscarPorId(turno.getEspecialidadId()).orElseThrow(
-                IllegalArgumentException::new
-        );
-
         Turno modelo = Turno.builder()
                 .id(turno.getId())
-                .medico(medico)
+                .medico(Medico.builder().id(turno.getMedicoId()).build())
                 .horario(turno.getHorario())
                 .confirmado(false)
-                .especialidad(especialidad).build();
+                .especialidad(Especialidad.builder().id(turno.getEspecialidadId()).build()).build();
 
         Turno nuevoTurno = agendaService.cargarAgenda(modelo);
 

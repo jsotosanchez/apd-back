@@ -2,6 +2,8 @@ package me.apd;
 
 import liquibase.integration.spring.SpringLiquibase;
 import me.apd.controllers.AgendaController;
+import me.apd.entities.Especialidad;
+import me.apd.entities.Medico;
 import me.apd.entities.Turno;
 import me.apd.repositories.AgendaRepository;
 import me.apd.repositories.EspecialidadRepository;
@@ -22,10 +24,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import javax.sql.DataSource;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(AgendaController.class)
@@ -49,13 +53,16 @@ public class AgendaControllerTest {
 
     @Test
     public void nuevoTurno(@Autowired MockMvc mockMvc) throws Exception {
-        Turno turno = Turno.builder().id(1L).build();
+        Turno turno = Turno.builder().id(1L).medico(Medico.builder().id(2L).build())
+                .especialidad(Especialidad.builder().id(3L).build())
+                .build();
 
-        doReturn(turno).when(agendaRepository).save(any(Turno.class));
+        doReturn(turno).when(agendaRepository).save(eq(turno));
 
         mockMvc.perform(post("/agenda/")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{}")).andDo(print()).andExpect(status().isOk());
+                .content("{\"id\":1}")).andDo(print()).andExpect(status().isOk())
+                .andExpect(content().json("{\"id\":1}"));
     }
 
     @Test
