@@ -23,10 +23,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import javax.sql.DataSource;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -43,13 +41,6 @@ public class AgendaControllerTest {
     private MedicoRepository medicoRepository;
     @MockBean
     private PacienteRepository pacienteRepository;
-//    private Agenda agenda;
-
-//    @BeforeEach
-//    void setUp(){
-//        controller = new AgendaController(agenda);
-//
-//    }
 
     @Test
     public void nuevoTurno(@Autowired MockMvc mockMvc) throws Exception {
@@ -69,7 +60,7 @@ public class AgendaControllerTest {
     public void modificarTurno(@Autowired MockMvc mockMvc) throws Exception {
         Turno turno = Turno.builder().id(1L).build();
 
-        doReturn(turno).when(agendaRepository).save(any(Turno.class));
+        doReturn(turno).when(agendaRepository).save(eq(turno));
 
         mockMvc.perform(put("/agenda/{id}", "1")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -83,6 +74,18 @@ public class AgendaControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{}")).andDo(print()).andExpect(status().isOk());
         verify(agendaRepository).deleteById(1L);
+    }
+
+    @Test
+    public void reservarTurno(@Autowired MockMvc mockMvc) throws Exception {
+        Turno turno = Turno.builder().id(1L).build();
+
+        doThrow().when(agendaRepository.findById(turno.getId()));
+        doReturn(turno).when(agendaRepository).save(eq(turno));
+
+        mockMvc.perform(put("/agenda/{id}/reservar", "1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{}")).andDo(print()).andExpect(status().isOk());
     }
 
     @TestConfiguration

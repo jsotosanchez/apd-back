@@ -1,9 +1,10 @@
 package me.apd.controllers;
 
+import me.apd.controllers.dto.PacienteView;
 import me.apd.controllers.dto.TurnoNuevoView;
-import me.apd.controllers.dto.TurnoView;
 import me.apd.entities.Especialidad;
 import me.apd.entities.Medico;
+import me.apd.entities.Paciente;
 import me.apd.entities.Turno;
 import me.apd.services.Agenda;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +19,7 @@ public class AgendaController {
     }
 
     @PostMapping("/")
-    public TurnoView nuevoTurno(@RequestBody TurnoNuevoView turno) {
+    public Long nuevoTurno(@RequestBody TurnoNuevoView turno) {
 
         Turno modelo = Turno.builder()
                 .id(turno.getId())
@@ -27,31 +28,61 @@ public class AgendaController {
                 .confirmado(false)
                 .especialidad(Especialidad.builder().id(turno.getEspecialidadId()).build()).build();
 
-        Turno nuevoTurno = agendaService.cargarAgenda(modelo);
+        Turno nuevoTurno = agendaService.guardarAgenda(modelo);
 
-        return TurnoView.builder().id(nuevoTurno.getId()).build();
+        return nuevoTurno.getId();
     }
 
     @PutMapping("{id}")
-    public TurnoView modificarTurno(@PathVariable String id, @RequestBody TurnoView turno) {
-        Turno modelo = Turno.builder().id(Long.parseLong(id)).build();
-        Turno nuevoTurno = agendaService.modificarAgenda(modelo);
+    public Long modificarTurno(@RequestBody TurnoNuevoView turno) {
 
-        return TurnoView.builder().id(nuevoTurno.getId()).build();
+        Turno modelo = Turno.builder()
+                .id(turno.getId())
+                .medico(Medico.builder().id(turno.getMedicoId()).build())
+                .horario(turno.getHorario())
+                .confirmado(false)
+                .especialidad(Especialidad.builder().id(turno.getEspecialidadId()).build()).build();
+        Turno nuevoTurno = agendaService.guardarAgenda(modelo);
+
+        return nuevoTurno.getId();
     }
 
     @DeleteMapping("{id}")
-    public void eliminarTurno(@PathVariable String id) {
+    public Long eliminarTurno(@PathVariable String id) {
         agendaService.eliminarPorId(Long.parseLong(id));
+        return Long.parseLong(id);
     }
 
-//    @PutMapping("{id}/reservar")
-//    public TurnoView reservarTurno(@PathVariable String id, @RequestBody PacienteView paciente){
-//        Optional<Turno> turno = agenda.buscarPorId(Long.parseLong(id));
-//        if(paciente.getPagoAlDia()){
-//
-//        }
-////        return que no tiene permiso
-////        return ResponseEntity<>
-//    }
+    @PutMapping("{id}/reservar")
+    public Long reservarTurno(@PathVariable String id, @RequestBody PacienteView paciente) throws IllegalAccessException {
+        Turno turno = agendaService.buscarPorId(Long.parseLong(id)).orElseThrow(
+                IllegalAccessException::new
+        );
+        turno.setPaciente(Paciente.builder().id(paciente.getId()).build());
+        Turno reserva = agendaService.guardarAgenda(turno);
+
+        return reserva.getId();
+    }
+
+    @PutMapping("{id}/cancelar")
+    public Long cancelarTurno(@PathVariable String id, @RequestBody PacienteView paciente) throws IllegalAccessException {
+        Turno turno = agendaService.buscarPorId(Long.parseLong(id)).orElseThrow(
+                IllegalAccessException::new
+        );
+        turno.setPaciente(null);
+        Turno cancelado = agendaService.guardarAgenda(turno);
+
+        return cancelado.getId();
+    }
+
+    @PutMapping("{id}/confirmar")
+    public Long confirmarTurno(@PathVariable String id, @RequestBody PacienteView paciente) throws IllegalAccessException {
+        Turno turno = agendaService.buscarPorId(Long.parseLong(id)).orElseThrow(
+                IllegalAccessException::new
+        );
+        turno.setConfirmado(true);
+        Turno confirmado = agendaService.guardarAgenda(turno);
+
+        return confirmado.getId();
+    }
 }

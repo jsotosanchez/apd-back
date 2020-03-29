@@ -16,13 +16,7 @@ public class AgendaImpl implements Agenda {
     }
 
     @Override
-    public Turno cargarAgenda(Turno turno) {
-        agendaRepository.save(turno);
-        return turno;
-    }
-
-    @Override
-    public Turno modificarAgenda(Turno turno) {
+    public Turno guardarAgenda(Turno turno) {
         agendaRepository.save(turno);
         return turno;
     }
