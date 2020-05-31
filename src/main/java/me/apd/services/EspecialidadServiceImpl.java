@@ -4,7 +4,10 @@ import me.apd.entities.Especialidad;
 import me.apd.repositories.EspecialidadRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 public class EspecialidadServiceImpl implements EspecialidadService {
@@ -17,5 +20,10 @@ public class EspecialidadServiceImpl implements EspecialidadService {
     @Override
     public Optional<Especialidad> buscarPorId(long id) {
         return repository.findById(id);
+    }
+
+    @Override
+    public List<Especialidad> buscarTodos() {
+        return StreamSupport.stream(repository.findAll().spliterator(), false).collect(Collectors.toList());
     }
 }

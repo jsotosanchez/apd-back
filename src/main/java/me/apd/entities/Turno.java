@@ -6,7 +6,7 @@ import lombok.Data;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -14,12 +14,13 @@ import java.util.Date;
 public class Turno {
     @Id
     private Long id;
-    private Date horario;
+    private LocalDateTime horario;
+    private LocalDateTime fecha;
     private Boolean confirmado;
     @ManyToOne
-    private Medico medico;
+    private Usuario medico;
     @ManyToOne
-    private Paciente paciente;
+    private Usuario paciente;
     @ManyToOne
     private Especialidad especialidad;
 }

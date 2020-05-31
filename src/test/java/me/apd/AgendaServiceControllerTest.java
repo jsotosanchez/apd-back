@@ -3,12 +3,11 @@ package me.apd;
 import liquibase.integration.spring.SpringLiquibase;
 import me.apd.controllers.AgendaController;
 import me.apd.entities.Especialidad;
-import me.apd.entities.Medico;
 import me.apd.entities.Turno;
+import me.apd.entities.Usuario;
 import me.apd.repositories.AgendaRepository;
 import me.apd.repositories.EspecialidadRepository;
-import me.apd.repositories.MedicoRepository;
-import me.apd.repositories.PacienteRepository;
+import me.apd.repositories.UsuarioRepository;
 import me.apd.services.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,20 +30,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(AgendaController.class)
-public class AgendaControllerTest {
+public class AgendaServiceControllerTest {
 
     @MockBean
     private AgendaRepository agendaRepository;
     @MockBean
     private EspecialidadRepository especialidadRepository;
     @MockBean
-    private MedicoRepository medicoRepository;
-    @MockBean
-    private PacienteRepository pacienteRepository;
+    private UsuarioRepository usuarioRepository;
 
     @Test
     public void nuevoTurno(@Autowired MockMvc mockMvc) throws Exception {
-        Turno turno = Turno.builder().id(1L).medico(Medico.builder().id(2L).build())
+        Turno turno = Turno.builder().id(1L).medico(Usuario.builder().id(2L).build())
                 .especialidad(Especialidad.builder().id(3L).build())
                 .build();
 
@@ -92,13 +89,13 @@ public class AgendaControllerTest {
     static class Config {
 
         @Bean
-        public Agenda agenda(AgendaRepository repository) {
-            return new AgendaImpl(repository);
+        public AgendaService agenda(AgendaRepository repository) {
+            return new AgendaServiceImpl(repository);
         }
 
         @Bean
-        public Usuario usuario(MedicoRepository medicoRepository, PacienteRepository pacienteRepository) {
-            return new UsuarioImpl(medicoRepository, pacienteRepository);
+        public UsuarioService usuario(UsuarioRepository usuarioRepository) {
+            return new UsuarioServiceImpl(usuarioRepository);
         }
 
         @Bean

@@ -6,16 +6,18 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.lang.Nullable;
 
+import java.util.Collection;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TurnoNuevoView {
+public class UsuarioView {
     @Nullable
-    private String id;
-    private String horario;
-    private String pacienteId;
-    private String medicoId;
-    private String especialidadId;
-    private Boolean confirmado;
+    private Long id;
+    private String nombre;
+    private String documento;
+    private String matricula;
+    private Boolean pagoAlDia;
+    private Collection<EspecialidadView> especialidad;
 }

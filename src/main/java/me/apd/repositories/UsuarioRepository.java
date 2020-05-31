@@ -1,9 +1,9 @@
 package me.apd.repositories;
 
-import me.apd.entities.Medico;
+import me.apd.entities.Usuario;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface MedicoRepository extends CrudRepository<Medico, Long> {
+public interface UsuarioRepository extends CrudRepository<Usuario, Long> {
 }

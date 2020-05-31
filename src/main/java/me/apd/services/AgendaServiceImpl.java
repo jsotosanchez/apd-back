@@ -4,14 +4,15 @@ import me.apd.entities.Turno;
 import me.apd.repositories.AgendaRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
-public class AgendaImpl implements Agenda {
+public class AgendaServiceImpl implements AgendaService {
 
     private final AgendaRepository agendaRepository;
 
-    public AgendaImpl(AgendaRepository agendaRepository) {
+    public AgendaServiceImpl(AgendaRepository agendaRepository) {
         this.agendaRepository = agendaRepository;
     }
 
@@ -29,6 +30,11 @@ public class AgendaImpl implements Agenda {
     @Override
     public Optional<Turno> buscarPorId(long id) {
         return agendaRepository.findById(id);
+    }
+
+    @Override
+    public Iterable<Turno> guardarTodos(List<Turno> turnos) {
+        return agendaRepository.saveAll(turnos);
     }
 
 
