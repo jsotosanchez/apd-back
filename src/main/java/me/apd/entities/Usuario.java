@@ -3,8 +3,8 @@ package me.apd.entities;
 import lombok.Builder;
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data
@@ -16,5 +16,10 @@ public class Usuario {
     private String documento;
     private Boolean pagoAlDia;
     private String matricula;
-
+    @ManyToMany
+    @JoinTable(
+            name = "especialidadesDeMedico",
+            joinColumns = @JoinColumn(name = "id"),
+            inverseJoinColumns = @JoinColumn(name = "medico_id"))
+    private List<Especialidad> especialidades;
 }
