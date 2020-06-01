@@ -16,7 +16,7 @@ import java.util.Optional;
 
 @RestController
 @Validated
-@RequestMapping("/agenda")
+@RequestMapping("/especialidad")
 public class EspecialidadController {
     private final EspecialidadService especialidadService;
     private final UsuarioService usuarioService;
@@ -26,12 +26,12 @@ public class EspecialidadController {
         this.usuarioService = usuarioService;
     }
 
-    @GetMapping("/especialidad")
+    @GetMapping("")
     public List<Especialidad> buscarTodos() {
         return especialidadService.buscarTodos();
     }
 
-    @GetMapping("/especialidad/medico/{id}")
+    @GetMapping("/medico/{id}")
     public List<Especialidad> especialidadesPorMedico(@PathVariable String medicoId) {
         Optional<Usuario> medico = usuarioService.buscarMedicoPorId(Long.parseLong(medicoId));
         if (medico.isPresent()) {
