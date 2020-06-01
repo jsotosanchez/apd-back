@@ -1,6 +1,7 @@
 package me.apd.services;
 
 import me.apd.entities.Especialidad;
+import me.apd.entities.Usuario;
 import me.apd.repositories.EspecialidadRepository;
 import org.springframework.stereotype.Service;
 
@@ -25,5 +26,10 @@ public class EspecialidadServiceImpl implements EspecialidadService {
     @Override
     public List<Especialidad> buscarTodos() {
         return StreamSupport.stream(repository.findAll().spliterator(), false).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Especialidad> buscarPorMedico(Usuario medico) {
+        return repository.findByMedico(medico.getId());
     }
 }
