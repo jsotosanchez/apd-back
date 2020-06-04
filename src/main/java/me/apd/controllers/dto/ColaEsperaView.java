@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ColaEsperaView {
-    private Long especialidadId;
-    private Long usuarioId;
+    private String especialidadId;
+    private String pacienteId;
+    private String medicoId;
 }

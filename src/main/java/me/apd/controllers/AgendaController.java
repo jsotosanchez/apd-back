@@ -1,15 +1,13 @@
 package me.apd.controllers;
 
 import me.apd.controllers.dto.*;
-import me.apd.entities.Especialidad;
-import me.apd.entities.Turno;
-import me.apd.entities.Usuario;
+import me.apd.entities.*;
 import me.apd.services.AgendaService;
+import me.apd.services.ColaDeEsperaService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,24 +16,21 @@ import java.util.List;
 @RequestMapping("/agenda")
 public class AgendaController {
     private final AgendaService agendaService;
+    private final ColaDeEsperaService colaDeEsperaService;
 
-    public AgendaController(AgendaService agenda) {
+    public AgendaController(AgendaService agenda, ColaDeEsperaService colaDeEsperaService) {
         this.agendaService = agenda;
-    }
-
-    @GetMapping("/test")
-    public String test() {
-        return "hola!";
+        this.colaDeEsperaService = colaDeEsperaService;
     }
 
     @PostMapping("")
     public void generarAgenda(@RequestBody AgendaView body) {
 
         LocalDateTime fechaFin = LocalDateTime.parse(body.getFechaFin() + "T" + body.getHoraInicio());
+        LocalDateTime fechaInicial = LocalDateTime.parse(body.getFechaInicio() + "T" + body.getHoraInicio());
         LocalDateTime fechaTurno = LocalDateTime.parse(body.getFechaInicio() + "T" + body.getHoraInicio());
-        LocalTime horaFin = LocalTime.parse(body.getHoraFin());
+        LocalDateTime horaFin = LocalDateTime.parse(body.getHoraFin());
         List<Turno> turnosCreados = new ArrayList<>();
-        Long minutosAgregados = Long.parseLong("0");
         while (fechaTurno.isBefore(fechaFin)) {
             Turno turnoNuevo = Turno.builder()
                     .medico(Usuario.builder()
@@ -47,11 +42,11 @@ public class AgendaController {
                     .horario(fechaTurno)
                     .build();
             turnosCreados.add(turnoNuevo);
-            fechaTurno.plusMinutes(Long.parseLong(body.getDuracion()));
-            minutosAgregados += Long.parseLong(body.getDuracion());
+
+            fechaTurno.plusMinutes(30);
             if (fechaTurno.getHour() > horaFin.getHour() && fechaTurno.getMinute() > horaFin.getMinute()) {
+                fechaTurno = fechaInicial;
                 fechaTurno.plusDays(1);
-                fechaTurno.minusMinutes(minutosAgregados);
             }
         }
         agendaService.guardarTodos(turnosCreados);
@@ -67,9 +62,7 @@ public class AgendaController {
                 .confirmado(turno.getConfirmado())
                 .especialidad(Especialidad.builder().id(Long.parseLong(turno.getEspecialidadId())).build())
                 .build();
-        Turno nuevoTurno = agendaService.guardarAgenda(modelo);
-
-        return nuevoTurno.getId();
+        return agendaService.guardarTurno(modelo).getId();
     }
 
     @DeleteMapping("{id}")
@@ -84,7 +77,7 @@ public class AgendaController {
                 IllegalAccessException::new
         );
         turno.setPaciente(Usuario.builder().id(paciente.getId()).build());
-        Turno reserva = agendaService.guardarAgenda(turno);
+        Turno reserva = agendaService.guardarTurno(turno);
 
         return reserva.getId();
     }
@@ -97,9 +90,10 @@ public class AgendaController {
         turno.setPaciente(null);
 
         if (usuario.getMatricula().isEmpty()) {
-            //buscar otro en cola de espera;
-            //turno.setPaciente(resultadoDeBusqueda)
-            Turno cancelado = agendaService.guardarAgenda(turno);
+            ColaDeEspera colaDeEspera = colaDeEsperaService.buscarPorEspecialidad(turno.getEspecialidad());
+            turno.setPaciente(colaDeEspera.getPaciente());
+            agendaService.guardarTurno(turno);
+            //TO DO: enviar notificacion
         } else {
             agendaService.eliminarPorId(turno.getId());
         }
@@ -113,28 +107,25 @@ public class AgendaController {
                 IllegalAccessException::new
         );
         turno.setConfirmado(true);
-        Turno confirmado = agendaService.guardarAgenda(turno);
+        Turno confirmado = agendaService.guardarTurno(turno);
 
         return confirmado.getId();
     }
 
     @GetMapping("/{especialidadId}/{medicoId}")
-    public /*List<TurnoView>*/void buscarTurnosDisponibles(@PathVariable String especialidadId, @PathVariable String medicoId) {
-
-//      return  agendaService.buscarPorEspecialidadYMedico(especialidadId, medicoId)
-
+    public List<Horario> buscarTurnosDisponibles(@PathVariable String especialidadId, @PathVariable String medicoId) {
+        return agendaService.buscarDisponiblesPorEspecialidadYMedico(especialidadId, medicoId);
     }
 
     @GetMapping("/{id}")
-    public /*List<TurnoView>*/void buscarMisTurnos(@PathVariable String id) {
-
-//        return agendaService.buscarPorPacienteId(Long.parseLong(id));
+    public List<Turno> buscarMisTurnos(@PathVariable String id) {
+        return agendaService.buscarPorPaciente(Long.parseLong(id));
     }
 
     @PostMapping("/cola")
-    public int agregarAColaDeEspera(@RequestBody ColaEsperaView colaEspera) {
-
-//        return colaEsperaService.save(colaEspera);
-        return 1;
+    public Long agregarAColaDeEspera(@RequestBody ColaEsperaView colaEspera) {
+        return colaDeEsperaService.agregar(Long.parseLong(colaEspera.getEspecialidadId())
+                , Long.parseLong(colaEspera.getPacienteId()),
+                Long.parseLong(colaEspera.getMedicoId())).getId();
     }
 }

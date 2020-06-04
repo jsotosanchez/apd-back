@@ -1,9 +1,14 @@
 package me.apd.entities;
 
-import java.time.Instant;
+import lombok.Builder;
+import lombok.Data;
 
+import java.time.LocalDateTime;
+
+@Data
+@Builder
 public class Horario {
-    private Instant horario;
+    private LocalDateTime horario;
 }
 
 

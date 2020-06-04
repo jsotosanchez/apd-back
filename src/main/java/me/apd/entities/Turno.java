@@ -6,15 +6,17 @@ import lombok.Data;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import java.time.Instant;
+import javax.persistence.Table;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
 @Builder
+@Table(name = "turnos")
 public class Turno {
     @Id
     private Long id;
-    private Instant horario;
+    private LocalDateTime horario;
     private Boolean confirmado;
     @ManyToOne
     private Usuario medico;

@@ -24,4 +24,9 @@ public class UsuarioServiceImpl implements UsuarioService {
         return usuarioRepository.findById(id);
     }
 
+    @Override
+    public Optional<Usuario> buscarPorDocumento(String s) {
+        return usuarioRepository.findByDocumento(s);
+    }
+
 }

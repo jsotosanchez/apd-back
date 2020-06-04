@@ -2,12 +2,14 @@ package me.apd.services;
 
 import me.apd.entities.Notificacion;
 import me.apd.repositories.NotificacionRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+@Service
 public class NotificacionServiceImpl implements NotificacionService {
     private final NotificacionRepository repository;
 

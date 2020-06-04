@@ -1,8 +1,8 @@
 package me.apd.controllers;
 
 import me.apd.entities.Especialidad;
-import me.apd.entities.Usuario;
 import me.apd.exceptions.MedicoNotFoundException;
+import me.apd.repositories.EspecialidadBase;
 import me.apd.services.EspecialidadService;
 import me.apd.services.UsuarioService;
 import org.springframework.validation.annotation.Validated;
@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @Validated
@@ -27,18 +26,14 @@ public class EspecialidadController {
     }
 
     @GetMapping("")
-    public List<Especialidad> buscarTodos() {
+    public List<EspecialidadBase> buscarTodos() {
         return especialidadService.buscarTodos();
     }
 
     @GetMapping("/medico/{id}")
-    public List<Especialidad> especialidadesPorMedico(@PathVariable String medicoId) {
-        Optional<Usuario> medico = usuarioService.buscarMedicoPorId(Long.parseLong(medicoId));
-        if (medico.isPresent()) {
-            especialidadService.buscarPorMedico(medico.get());
-        } else {
-            throw new MedicoNotFoundException();
-        }
-        return especialidadService.buscarTodos();
+    public List<Especialidad> especialidadesPorMedico(@PathVariable Long medicoId) {
+        return usuarioService.buscarMedicoPorId(medicoId)
+                .map(especialidadService::buscarPorMedico)
+                .orElseThrow(MedicoNotFoundException::new);
     }
 }

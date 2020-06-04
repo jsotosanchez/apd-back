@@ -8,4 +8,6 @@ public interface UsuarioService {
     Optional<Usuario> buscarMedicoPorId(long id);
 
     Optional<Usuario> buscarPacientePorId(long id);
+
+    Optional<Usuario> buscarPorDocumento(String s);
 }

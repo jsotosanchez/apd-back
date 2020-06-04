@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @RestController
 @Validated
-@RequestMapping("/notificacion")
+@RequestMapping("/notificaciones")
 public class NotificacionController {
     private final NotificacionService notificacionService;
 

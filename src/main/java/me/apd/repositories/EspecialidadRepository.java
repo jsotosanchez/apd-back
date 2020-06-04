@@ -5,12 +5,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
-import java.time.Instant;
 import java.util.List;
 
 public interface EspecialidadRepository extends CrudRepository<Especialidad, Long> {
     @Query("select e from Especialidad e join e.medico m where m.id = :medico_id")
     List<Especialidad> findByMedico(@Param("medico_id") Long usuarioId);
 
-    List<Especialidad> findByMedicoAndDiaBetween(@Param("medico_id") Long medicoId, @Param("desde") Instant desde, @Param("hasta") Instant hasta);
+    @Query("select NEW me.apd.repositories.EspecialidadBase(e.id, e.descripcion) from Especialidad e")
+    List<EspecialidadBase> findAllEspecialidadBase();
+
+    //    List<Especialidad> findByMedicoAndHorarioBetween(@Param("medico_id") Long medicoId, @Param("desde") Instant desde, @Param("hasta") Instant hasta);
 }

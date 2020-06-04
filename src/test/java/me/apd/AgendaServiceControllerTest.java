@@ -1,6 +1,5 @@
 package me.apd;
 
-import liquibase.integration.spring.SpringLiquibase;
 import me.apd.controllers.AgendaController;
 import me.apd.entities.Especialidad;
 import me.apd.entities.Turno;
@@ -108,13 +107,13 @@ public class AgendaServiceControllerTest {
             return new EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.H2).generateUniqueName(true).build();
         }
 
-        @Bean
-        public SpringLiquibase liquibase(DataSource dataSource) {
-            SpringLiquibase liquibase = new SpringLiquibase();
-            liquibase.setDataSource(dataSource);
-            liquibase.isDropFirst();
-            liquibase.setChangeLog("classpath:/db/changelog/db.changelog-master.yaml");
-            return liquibase;
-        }
+//        @Bean
+//        public SpringLiquibase liquibase(DataSource dataSource) {
+//            SpringLiquibase liquibase = new SpringLiquibase();
+//            liquibase.setDataSource(dataSource);
+//            liquibase.isDropFirst();
+//            liquibase.setChangeLog("classpath:/db/changelog/db.changelog-master.yaml");
+//            return liquibase;
+//        }
     }
 }
