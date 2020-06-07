@@ -8,8 +8,8 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface EspecialidadRepository extends CrudRepository<Especialidad, Long> {
-    @Query("select e from Especialidad e join e.medico m where m.id = :medico_id")
-    List<Especialidad> findByMedico(@Param("medico_id") Long usuarioId);
+    @Query("select NEW me.apd.repositories.EspecialidadBase(e.id, e.descripcion) from Especialidad e join e.medico m where m.id = :medico_id")
+    List<EspecialidadBase> findByMedico(@Param("medico_id") Long id);
 
     @Query("select NEW me.apd.repositories.EspecialidadBase(e.id, e.descripcion) from Especialidad e")
     List<EspecialidadBase> findAllEspecialidadBase();

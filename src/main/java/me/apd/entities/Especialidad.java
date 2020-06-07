@@ -19,10 +19,10 @@ public class Especialidad {
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "especialidades_de_medico",
-            joinColumns = @JoinColumn(name = "id"),
-            inverseJoinColumns = @JoinColumn(name = "especialidad_id")
+            joinColumns = @JoinColumn(name = "especialidad_id"),
+            inverseJoinColumns = @JoinColumn(name = "medico_id")
     )
-    private List<Usuario> medico = Collections.EMPTY_LIST;
+    private List<Usuario> medico = Collections.emptyList();
 
     public Especialidad(Long id, String descripcion, List<Usuario> medico) {
         this.id = id;

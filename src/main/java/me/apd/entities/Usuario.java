@@ -21,8 +21,8 @@ public class Usuario {
     @ManyToMany
     @JoinTable(
             name = "especialidades_de_medico",
-            joinColumns = @JoinColumn(name = "id"),
-            inverseJoinColumns = @JoinColumn(name = "medico_id"))
+            joinColumns = @JoinColumn(name = "medico_id"),
+            inverseJoinColumns = @JoinColumn(name = "especialidad_id"))
     private List<Especialidad> especialidades;
 
     public Usuario() {

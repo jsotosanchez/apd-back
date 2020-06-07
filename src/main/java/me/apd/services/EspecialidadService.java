@@ -1,7 +1,6 @@
 package me.apd.services;
 
 import me.apd.entities.Especialidad;
-import me.apd.entities.Usuario;
 import me.apd.repositories.EspecialidadBase;
 
 import java.util.List;
@@ -12,5 +11,5 @@ public interface EspecialidadService {
 
     List<EspecialidadBase> buscarTodos();
 
-    List<Especialidad> buscarPorMedico(Usuario medico);
+    List<EspecialidadBase> buscarPorUsuarioId(Long id);
 }
