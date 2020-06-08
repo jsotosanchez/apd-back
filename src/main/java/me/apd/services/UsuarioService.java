@@ -11,4 +11,5 @@ public interface UsuarioService {
     Optional<Usuario> buscarPorDocumento(String s);
 
     Optional<UsuarioBase> buscarUsuarioBasePorId(long id);
+
 }

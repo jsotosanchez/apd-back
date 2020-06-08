@@ -1,23 +1,16 @@
 package me.apd.controllers.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.lang.Nullable;
+
+import lombok.Value;
 
 import java.util.Collection;
 
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@Value
 public class UsuarioView {
-    @Nullable
-    private Long id;
-    private String nombre;
-    private String documento;
-    private String matricula;
-    private Boolean pagoAlDia;
-    private Collection<EspecialidadView> especialidad;
+    Long id;
+    String nombre;
+    String documento;
+    String matricula;
+    Boolean pagoAlDia;
+    Collection<EspecialidadView> especialidad;
 }
