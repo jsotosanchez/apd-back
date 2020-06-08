@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @Validated
-@RequestMapping("/especialidad")
+@RequestMapping("/especialidades")
 public class EspecialidadController {
     private final EspecialidadService especialidadService;
 
