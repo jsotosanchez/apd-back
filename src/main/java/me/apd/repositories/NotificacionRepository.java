@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public interface NotificacionRepository extends CrudRepository<Notificacion, Long> {
-    List<Notificacion> findByUsuarioAndLeidaTrue(Usuario usuario);
+    List<Notificacion> findByUsuarioAndLeidaFalse(Usuario id);
 }
 
 

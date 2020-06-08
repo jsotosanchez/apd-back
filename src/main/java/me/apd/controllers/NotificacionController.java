@@ -19,14 +19,14 @@ public class NotificacionController {
         this.notificacionService = notificacionService;
     }
 
-    @GetMapping("")
-    public List<Notificacion> buscarTodas() {
-        return notificacionService.buscarTodas();
+    @GetMapping("/usuario/{id}")
+    public List<Notificacion> buscarPorUsuario(@PathVariable Long id) {
+        return notificacionService.buscarPorUsuario(id);
     }
 
-    @PatchMapping("/{id}")
-    public Long marcarLeida(@PathVariable String id) {
-        Optional<Notificacion> notificacion = notificacionService.buscarPorId(Long.parseLong(id));
+    @PatchMapping("/{id}/marcarLeida")
+    public Long marcarLeida(@PathVariable Long id) {
+        Optional<Notificacion> notificacion = notificacionService.buscarPorId(id);
 
         if (notificacion.isPresent()) {
             return notificacionService.marcarLeida(notificacion.get()).getId();

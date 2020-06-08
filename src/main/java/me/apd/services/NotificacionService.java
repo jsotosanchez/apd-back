@@ -11,4 +11,6 @@ public interface NotificacionService {
     Notificacion marcarLeida(Notificacion notificacion);
 
     List<Notificacion> buscarTodas();
+
+    List<Notificacion> buscarPorUsuario(Long id);
 }
