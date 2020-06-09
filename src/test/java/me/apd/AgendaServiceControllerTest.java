@@ -1,13 +1,14 @@
 package me.apd;
 
-import me.apd.controllers.AgendaController;
-import me.apd.entities.Especialidad;
-import me.apd.entities.Turno;
-import me.apd.entities.Usuario;
-import me.apd.repositories.AgendaRepository;
-import me.apd.repositories.EspecialidadRepository;
-import me.apd.repositories.UsuarioRepository;
-import me.apd.services.*;
+import me.apd.agenda.*;
+import me.apd.especialidad.Especialidad;
+import me.apd.especialidad.EspecialidadRepository;
+import me.apd.especialidad.EspecialidadService;
+import me.apd.especialidad.EspecialidadServiceImpl;
+import me.apd.usuario.Usuario;
+import me.apd.usuario.UsuarioRepository;
+import me.apd.usuario.UsuarioService;
+import me.apd.usuario.UsuarioServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
