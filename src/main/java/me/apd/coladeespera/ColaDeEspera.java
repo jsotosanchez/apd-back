@@ -2,8 +2,6 @@ package me.apd.coladeespera;
 
 import lombok.Builder;
 import lombok.Data;
-import me.apd.especialidad.Especialidad;
-import me.apd.usuario.Usuario;
 
 import javax.persistence.*;
 
@@ -13,11 +11,19 @@ import javax.persistence.*;
 @Table(name = "cola_de_espera")
 public class ColaDeEspera {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToOne
-    private Usuario paciente;
-    @OneToOne
-    private Usuario medico;
-    @ManyToOne
-    private Especialidad especialidad;
+    private Long pacienteId;
+    private Long medicoId;
+    private Long especialidadId;
+
+    public ColaDeEspera(Long id, Long pacienteId, Long medicoId, Long especialidadId) {
+        this.id = id;
+        this.pacienteId = pacienteId;
+        this.medicoId = medicoId;
+        this.especialidadId = especialidadId;
+    }
+
+    public ColaDeEspera() {
+    }
 }
