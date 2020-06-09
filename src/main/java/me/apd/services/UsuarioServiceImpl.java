@@ -5,6 +5,7 @@ import me.apd.repositories.UsuarioBase;
 import me.apd.repositories.UsuarioRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -26,8 +27,13 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-    public Optional<UsuarioBase> buscarUsuarioBasePorId(long id) {
+    public Optional<UsuarioBase> buscarUsuarioBasePorId(Long id) {
         return usuarioRepository.findUsuarioBase(id);
+    }
+
+    @Override
+    public List<UsuarioBase> buscarMedicosPorEspecialidadId(Long id) {
+        return usuarioRepository.findByEspecialidad(id);
     }
 
 

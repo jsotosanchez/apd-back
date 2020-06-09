@@ -3,6 +3,7 @@ package me.apd.services;
 import me.apd.entities.Usuario;
 import me.apd.repositories.UsuarioBase;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UsuarioService {
@@ -10,6 +11,7 @@ public interface UsuarioService {
 
     Optional<Usuario> buscarPorDocumento(String s);
 
-    Optional<UsuarioBase> buscarUsuarioBasePorId(long id);
+    Optional<UsuarioBase> buscarUsuarioBasePorId(Long id);
 
+    List<UsuarioBase> buscarMedicosPorEspecialidadId(Long id);
 }

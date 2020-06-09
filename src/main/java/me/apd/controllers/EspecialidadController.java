@@ -23,6 +23,7 @@ public class EspecialidadController {
         return especialidadService.buscarTodos();
     }
 
+
     @GetMapping("/medico/{id}")
     public List<EspecialidadBase> especialidadesPorMedico(@PathVariable Long id) {
         return especialidadService.buscarPorUsuarioId(id);
