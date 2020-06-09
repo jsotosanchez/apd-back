@@ -1,8 +1,7 @@
 package me.apd.services;
 
 import me.apd.entities.Notificacion;
-import me.apd.entities.Usuario;
-import me.apd.exceptions.UsuarioNotFoundException;
+import me.apd.repositories.NotificacionBase;
 import me.apd.repositories.NotificacionRepository;
 import me.apd.repositories.UsuarioRepository;
 import org.springframework.stereotype.Service;
@@ -38,8 +37,7 @@ public class NotificacionServiceImpl implements NotificacionService {
     }
 
     @Override
-    public List<Notificacion> buscarPorUsuario(Long id) {
-        Usuario usuario = usuarioRepository.findById(id).orElseThrow(UsuarioNotFoundException::new);
-        return repository.findByUsuarioAndLeidaFalse(usuario);
+    public List<NotificacionBase> buscarPorUsuario(Long id) {
+        return repository.buscarNoLeidaPorUsuario(id);
     }
 }

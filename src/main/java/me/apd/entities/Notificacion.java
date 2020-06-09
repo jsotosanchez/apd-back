@@ -13,6 +13,15 @@ import javax.persistence.Table;
 @Builder
 @Table(name = "notificaciones")
 public class Notificacion {
+    public Notificacion() {
+    }
+
+    public Notificacion(Long id, String mensaje, Boolean leida, Usuario usuario) {
+        this.id = id;
+        this.mensaje = mensaje;
+        this.leida = leida;
+        this.usuario = usuario;
+    }
 
     @Id
     private Long id;

@@ -24,12 +24,4 @@ public class ApplicationConfig {
             return new HikariDataSource(config);
         }
     }
-
-//    @Bean
-//    SpringLiquibase liquibase(DataSource dataSource) {
-//        SpringLiquibase liquibase = new SpringLiquibase();
-//        liquibase.setDataSource(dataSource);
-//        liquibase.setChangeLog("classpath:/db/changelog/db.changelog-master.yaml");
-//        return liquibase;
-//    }
 }

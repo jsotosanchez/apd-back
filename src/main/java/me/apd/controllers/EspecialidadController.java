@@ -2,7 +2,6 @@ package me.apd.controllers;
 
 import me.apd.repositories.EspecialidadBase;
 import me.apd.services.EspecialidadService;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@Validated
 @RequestMapping("/especialidades")
 public class EspecialidadController {
     private final EspecialidadService especialidadService;

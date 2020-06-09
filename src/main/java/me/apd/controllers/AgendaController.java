@@ -1,18 +1,18 @@
 package me.apd.controllers;
 
-import me.apd.controllers.dto.*;
+import me.apd.controllers.dto.ColaEsperaView;
+import me.apd.controllers.dto.PacienteView;
+import me.apd.controllers.dto.TurnoNuevoView;
+import me.apd.controllers.dto.UsuarioView;
 import me.apd.entities.*;
 import me.apd.services.AgendaService;
 import me.apd.services.ColaDeEsperaService;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@Validated
 @RequestMapping("/agenda")
 public class AgendaController {
     private final AgendaService agendaService;
@@ -23,34 +23,34 @@ public class AgendaController {
         this.colaDeEsperaService = colaDeEsperaService;
     }
 
-    @PostMapping("")
-    public void generarAgenda(@RequestBody AgendaView body) {
-
-        LocalDateTime fechaFin = LocalDateTime.parse(body.getFechaFin() + "T" + body.getHoraInicio());
-        LocalDateTime fechaInicial = LocalDateTime.parse(body.getFechaInicio() + "T" + body.getHoraInicio());
-        LocalDateTime fechaTurno = LocalDateTime.parse(body.getFechaInicio() + "T" + body.getHoraInicio());
-        LocalDateTime horaFin = LocalDateTime.parse(body.getHoraFin());
-        List<Turno> turnosCreados = new ArrayList<>();
-        while (fechaTurno.isBefore(fechaFin)) {
-            Turno turnoNuevo = Turno.builder()
-                    .medico(Usuario.builder()
-                            .id(Long.parseLong(body.getMedicoId()))
-                            .build())
-                    .especialidad(Especialidad.builder()
-                            .id(Long.parseLong(body.getEspecialidadId()))
-                            .build())
-                    .horario(fechaTurno)
-                    .build();
-            turnosCreados.add(turnoNuevo);
-
-            fechaTurno.plusMinutes(30);
-            if (fechaTurno.getHour() > horaFin.getHour() && fechaTurno.getMinute() > horaFin.getMinute()) {
-                fechaTurno = fechaInicial;
-                fechaTurno.plusDays(1);
-            }
-        }
-        agendaService.guardarTodos(turnosCreados);
-    }
+//    @PostMapping("")
+//    public void generarAgenda(@RequestBody AgendaView body) {
+//
+//        LocalDateTime fechaFin = LocalDateTime.parse(body.getFechaFin() + "T" + body.getHoraInicio());
+//        LocalDateTime fechaInicial = LocalDateTime.parse(body.getFechaInicio() + "T" + body.getHoraInicio());
+//        LocalDateTime fechaTurno = LocalDateTime.parse(body.getFechaInicio() + "T" + body.getHoraInicio());
+//        LocalDateTime horaFin = LocalDateTime.parse(body.getHoraFin());
+//        List<Turno> turnosCreados = new ArrayList<>();
+//        while (fechaTurno.isBefore(fechaFin)) {
+//            Turno turnoNuevo = Turno.builder()
+//                    .medico(Usuario.builder()
+//                            .id(Long.parseLong(body.getMedicoId()))
+//                            .build())
+//                    .especialidad(Especialidad.builder()
+//                            .id(Long.parseLong(body.getEspecialidadId()))
+//                            .build())
+//                    .horario(fechaTurno)
+//                    .build();
+//            turnosCreados.add(turnoNuevo);
+//
+//            fechaTurno.plusMinutes(30);
+//            if (fechaTurno.getHour() > horaFin.getHour() && fechaTurno.getMinute() > horaFin.getMinute()) {
+//                fechaTurno = fechaInicial;
+//                fechaTurno.plusDays(1);
+//            }
+//        }
+//        agendaService.guardarTodos(turnosCreados);
+//    }
 
     @PatchMapping("{id}")
     public Long modificarTurno(@RequestBody TurnoNuevoView turno) {

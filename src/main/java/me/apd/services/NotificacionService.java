@@ -1,6 +1,7 @@
 package me.apd.services;
 
 import me.apd.entities.Notificacion;
+import me.apd.repositories.NotificacionBase;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,5 +13,5 @@ public interface NotificacionService {
 
     List<Notificacion> buscarTodas();
 
-    List<Notificacion> buscarPorUsuario(Long id);
+    List<NotificacionBase> buscarPorUsuario(Long id);
 }
