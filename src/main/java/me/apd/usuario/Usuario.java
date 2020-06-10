@@ -1,7 +1,9 @@
 package me.apd.usuario;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import me.apd.especialidad.Especialidad;
 
 import javax.persistence.*;
@@ -11,8 +13,12 @@ import java.util.List;
 @Data
 @Builder
 @Table(name = "usuarios")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Usuario {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Long id;
     private String nombre;
     private String documento;
@@ -25,17 +31,4 @@ public class Usuario {
             joinColumns = @JoinColumn(name = "medico_id"),
             inverseJoinColumns = @JoinColumn(name = "especialidad_id"))
     private List<Especialidad> especialidades;
-
-    public Usuario() {
-    }
-
-    public Usuario(Long id, String nombre, String documento, String password, Boolean pagoAlDia, String matricula, List<Especialidad> especialidades) {
-        this.id = id;
-        this.nombre = nombre;
-        this.documento = documento;
-        this.password = password;
-        this.pagoAlDia = pagoAlDia;
-        this.matricula = matricula;
-        this.especialidades = especialidades;
-    }
 }

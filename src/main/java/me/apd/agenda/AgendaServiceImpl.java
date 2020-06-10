@@ -53,5 +53,11 @@ public class AgendaServiceImpl implements AgendaService {
         return agendaRepository.findByPacienteAndHorarioAfter(paciente, hoy);
     }
 
+    @Override
+    public Long reservarTurno(Long usuarioId, Long turnoId) {
+        agendaRepository.reservarTurno(usuarioId, turnoId);
+        return turnoId;
+    }
+
 
 }

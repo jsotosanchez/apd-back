@@ -1,30 +1,22 @@
 package me.apd.notificacion;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import me.apd.usuario.Usuario;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Data
 @Builder
 @Table(name = "notificaciones")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Notificacion {
-    public Notificacion() {
-    }
-
-    public Notificacion(Long id, String mensaje, Boolean leida, Usuario usuario) {
-        this.id = id;
-        this.mensaje = mensaje;
-        this.leida = leida;
-        this.usuario = usuario;
-    }
-
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String mensaje;
     private Boolean leida;

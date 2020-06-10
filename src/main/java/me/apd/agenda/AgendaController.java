@@ -1,6 +1,5 @@
 package me.apd.agenda;
 
-import me.apd.coladeespera.ColaDeEsperaService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,7 +9,7 @@ import java.util.List;
 public class AgendaController {
     private final AgendaService agendaService;
 
-    public AgendaController(AgendaService agenda, ColaDeEsperaService colaDeEsperaService) {
+    public AgendaController(AgendaService agenda) {
         this.agendaService = agenda;
     }
 
@@ -43,35 +42,16 @@ public class AgendaController {
 //        agendaService.guardarTodos(turnosCreados);
 //    }
 
-//    @PatchMapping("{id}")
-//    public Long modificarTurno(@RequestBody TurnoNuevoView turno) {
-//
-//        Turno modelo = Turno.builder()
-//                .id(Long.parseLong(turno.getId()))
-//                .medico(Usuario.builder().id(Long.parseLong(turno.getMedicoId())).build())
-//                .horario(LocalDateTime.parse(turno.getHorario()))
-//                .confirmado(turno.getConfirmado())
-//                .especialidad(Especialidad.builder().id(Long.parseLong(turno.getEspecialidadId())).build())
-//                .build();
-//        return agendaService.guardarTurno(modelo).getId();
-//    }
-
     @DeleteMapping("{id}")
     public Long eliminarTurno(@PathVariable Long id) {
         agendaService.eliminarPorId(id);
         return id;
     }
 
-//    @PatchMapping("{id}/reservar")
-//    public Long reservarTurno(@PathVariable String id, @RequestBody PacienteView paciente) throws IllegalAccessException {
-//        Turno turno = agendaService.buscarPorId(Long.parseLong(id)).orElseThrow(
-//                IllegalAccessException::new
-//        );
-//        turno.setPaciente(Usuario.builder().id(paciente.getId()).build());
-//        Turno reserva = agendaService.guardarTurno(turno);
-//
-//        return reserva.getId();
-//    }
+    @PatchMapping("{id}/reservar")
+    public Long reservarTurno(@PathVariable(name = "id") Long turnoId, @RequestBody UsuarioBody paciente) {
+        return agendaService.reservarTurno(paciente.id, turnoId);
+    }
 
 //    @PatchMapping("{id}/cancelar")
 //    public Long cancelarTurno(@PathVariable String id, @RequestBody UsuarioView usuario) throws IllegalAccessException {
