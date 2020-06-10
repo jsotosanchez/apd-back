@@ -69,9 +69,17 @@ public class AgendaController {
         return confirmado.getId();
     }
 
-    @GetMapping("/{especialidadId}/{medicoId}")
-    public List<Horario> buscarTurnosDisponibles(@PathVariable Long especialidadId, @PathVariable Long medicoId) {
+    @GetMapping("turnos/especialidad/{especialidadId}/medico/{medicoId}")
+    public List<Turno> buscarTurnosDisponibles(@PathVariable Long especialidadId, @PathVariable Long medicoId) {
+        if (medicoId == null) {
+            return agendaService.buscarDisponiblesPorEspecialidad(especialidadId);
+        }
         return agendaService.buscarDisponiblesPorEspecialidadYMedico(especialidadId, medicoId);
+    }
+
+    @GetMapping("turnos/especialidad/{especialidadId}")
+    public List<Turno> buscarTurnosDisponibles(@PathVariable Long especialidadId) {
+        return agendaService.buscarDisponiblesPorEspecialidad(especialidadId);
     }
 
     @GetMapping("/{id}")

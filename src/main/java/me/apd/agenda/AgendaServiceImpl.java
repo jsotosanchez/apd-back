@@ -3,8 +3,8 @@ package me.apd.agenda;
 import me.apd.usuario.Usuario;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,11 +39,21 @@ public class AgendaServiceImpl implements AgendaService {
     }
 
     @Override
-    public List<Horario> buscarDisponiblesPorEspecialidadYMedico(Long especialidadId, Long medicoId) {
-        Horario hoy = Horario.builder().horario(LocalDateTime.now()).build();
+    public List<Turno> buscarDisponiblesPorEspecialidadYMedico(Long especialidadId, Long medicoId) {
+        Instant hoy = Instant.now();
 
         return agendaRepository
-                .findByEspecialidadAndMedicoAndHorarioAfterAndPacienteIsNull(especialidadId, medicoId, hoy);
+                .findByEspecialidadAndMedicoAndHorarioAfterAndPacienteIsNull(especialidadId, medicoId, Timestamp
+                        .from(hoy));
+//                .stream().map(t ->t.getHorario().toLocalDateTime()).collect(Collectors
+//                        .toList());
+    }
+
+    @Override
+    public List<Turno> buscarDisponiblesPorEspecialidad(Long especialidadId) {
+        Instant hoy = Instant.now();
+
+        return agendaRepository.findByDisponibleEspecialidad(especialidadId, Timestamp.from(hoy));
     }
 
     @Override
