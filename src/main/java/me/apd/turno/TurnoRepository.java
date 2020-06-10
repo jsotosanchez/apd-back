@@ -17,15 +17,15 @@ public interface TurnoRepository extends CrudRepository<Turno, Long> {
             " t.medico.id = :medicoId and" +
             " t.horario > :hoy and" +
             " t.paciente.id = null")
-    List<TurnoPacienteView> findByEspecialidadAndMedicoAndHorarioAfterAndPacienteIsNull(@Param("especialidadId") Long especialidadId,
-                                                                                        @Param("medicoId") Long medicoId,
-                                                                                        @Param("hoy") Timestamp hoy);
+    List<TurnoDisponibleView> findByEspecialidadAndMedicoAndHorarioAfterAndPacienteIsNull(@Param("especialidadId") Long especialidadId,
+                                                                                          @Param("medicoId") Long medicoId,
+                                                                                          @Param("hoy") Timestamp hoy);
 
     @Query("select t from Turno t " +
             "where t.especialidad.id = :especialidadId and" +
             " t.horario > :hoy and" +
             " t.paciente.id = null")
-    List<TurnoPacienteView> findByDisponibleEspecialidad(@Param("especialidadId") Long especialidadId, @Param("hoy") Timestamp hoy);
+    List<TurnoDisponibleView> findByDisponibleEspecialidad(@Param("especialidadId") Long especialidadId, @Param("hoy") Timestamp hoy);
 
     @Modifying
     @Transactional
@@ -39,7 +39,7 @@ public interface TurnoRepository extends CrudRepository<Turno, Long> {
     void cancelarTurno(Long turnoId);
 
     @Query("select t from Turno t where t.paciente.id = :pacienteId and t.horario > :hoy")
-    List<Turno> findByPaciente(@Param("pacienteId") long pacienteId, @Param("hoy") Timestamp hoy);
+    List<TurnoPacienteView> findByPaciente(@Param("pacienteId") long pacienteId, @Param("hoy") Timestamp hoy);
 
 
     @Query("select t from Turno t where t.medico.id = :medicoId and t.horario > :hoy")

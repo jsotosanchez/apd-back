@@ -12,15 +12,15 @@ public interface TurnoService {
 
     Iterable<Turno> guardarTodos(List<Turno> turnos);
 
-    List<TurnoPacienteView> buscarDisponiblesPorEspecialidadYMedico(Long especialidadId, Long medicoId);
+    List<TurnoDisponibleView> buscarDisponiblesPorEspecialidadYMedico(Long especialidadId, Long medicoId);
 
-    List<Turno> buscarPorPaciente(long parseLong);
+    List<TurnoPacienteView> buscarPorPaciente(long parseLong);
 
     Long reservarTurno(Long usuarioId, Long turnoId);
 
     Long cancelarTurno(Long turnoId);
 
-    List<TurnoPacienteView> buscarDisponiblesPorEspecialidad(Long especialidadId);
+    List<TurnoDisponibleView> buscarDisponiblesPorEspecialidad(Long especialidadId);
 
     List<Turno> buscarPorMedico(Long id);
 }
