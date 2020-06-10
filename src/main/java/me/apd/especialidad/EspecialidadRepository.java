@@ -12,6 +12,4 @@ public interface EspecialidadRepository extends CrudRepository<Especialidad, Lon
 
     @Query("select NEW me.apd.especialidad.EspecialidadBase(e.id, e.descripcion) from Especialidad e")
     List<EspecialidadBase> findAllEspecialidadBase();
-
-    //    List<Especialidad> findByMedicoAndHorarioBetween(@Param("medico_id") Long medicoId, @Param("desde") Instant desde, @Param("hasta") Instant hasta);
 }
