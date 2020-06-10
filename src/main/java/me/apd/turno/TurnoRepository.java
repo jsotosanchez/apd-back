@@ -17,15 +17,15 @@ public interface TurnoRepository extends CrudRepository<Turno, Long> {
             " t.medico.id = :medicoId and" +
             " t.horario > :hoy and" +
             " t.paciente.id = null")
-    List<Turno> findByEspecialidadAndMedicoAndHorarioAfterAndPacienteIsNull(@Param("especialidadId") Long especialidadId,
-                                                                            @Param("medicoId") Long medicoId,
-                                                                            @Param("hoy") Timestamp hoy);
+    List<TurnoPacienteView> findByEspecialidadAndMedicoAndHorarioAfterAndPacienteIsNull(@Param("especialidadId") Long especialidadId,
+                                                                                        @Param("medicoId") Long medicoId,
+                                                                                        @Param("hoy") Timestamp hoy);
 
     @Query("select t from Turno t " +
             "where t.especialidad.id = :especialidadId and" +
             " t.horario > :hoy and" +
             " t.paciente.id = null")
-    List<Turno> findByDisponibleEspecialidad(@Param("especialidadId") Long especialidadId, @Param("hoy") Timestamp hoy);
+    List<TurnoPacienteView> findByDisponibleEspecialidad(@Param("especialidadId") Long especialidadId, @Param("hoy") Timestamp hoy);
 
     @Modifying
     @Transactional

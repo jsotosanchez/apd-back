@@ -38,7 +38,7 @@ public class TurnoServiceImpl implements TurnoService {
     }
 
     @Override
-    public List<Turno> buscarDisponiblesPorEspecialidadYMedico(Long especialidadId, Long medicoId) {
+    public List<TurnoPacienteView> buscarDisponiblesPorEspecialidadYMedico(Long especialidadId, Long medicoId) {
         Instant hoy = Instant.now();
 
         return turnoRepository
@@ -49,7 +49,7 @@ public class TurnoServiceImpl implements TurnoService {
     }
 
     @Override
-    public List<Turno> buscarDisponiblesPorEspecialidad(Long especialidadId) {
+    public List<TurnoPacienteView> buscarDisponiblesPorEspecialidad(Long especialidadId) {
         Instant hoy = Instant.now();
 
         return turnoRepository.findByDisponibleEspecialidad(especialidadId, Timestamp.from(hoy));

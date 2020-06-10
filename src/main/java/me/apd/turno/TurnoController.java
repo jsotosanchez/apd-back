@@ -70,16 +70,14 @@ public class TurnoController {
     }
 
     @GetMapping("especialidad/{especialidadId}/medico/{medicoId}")
-    public List<Turno> buscarTurnosDisponibles(@PathVariable Long especialidadId, @PathVariable Long medicoId) {
-        if (medicoId == null) {
-            return turnoService.buscarDisponiblesPorEspecialidad(especialidadId);
-        }
+    public List<TurnoPacienteView> buscarTurnosDisponibles(@PathVariable Long especialidadId, @PathVariable Long medicoId) {
         return turnoService.buscarDisponiblesPorEspecialidadYMedico(especialidadId, medicoId);
     }
 
     @GetMapping("especialidad/{especialidadId}")
-    public List<Turno> buscarTurnosDisponibles(@PathVariable Long especialidadId) {
-        return turnoService.buscarDisponiblesPorEspecialidad(especialidadId);
+    public List<TurnoPacienteView> buscarTurnosDisponibles(@PathVariable Long especialidadId) {
+        List<TurnoPacienteView> lista = turnoService.buscarDisponiblesPorEspecialidad(especialidadId);
+        return lista;
     }
 
     @GetMapping("paciente/{id}")
