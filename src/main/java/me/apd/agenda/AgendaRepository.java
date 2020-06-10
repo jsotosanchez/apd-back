@@ -27,7 +27,6 @@ public interface AgendaRepository extends CrudRepository<Turno, Long> {
             " t.paciente.id = null")
     List<Turno> findByDisponibleEspecialidad(@Param("especialidadId") Long especialidadId, @Param("hoy") Timestamp hoy);
 
-//    List<Horario> findByMedicoAndHorarioAfter(Usuario medico, Instant dia);
 //
 //    List<Horario> findByMedicoAndHorarioBetween(Usuario medico, Instant desde, Instant hasta);
 
@@ -44,4 +43,8 @@ public interface AgendaRepository extends CrudRepository<Turno, Long> {
 
     @Query("select t from Turno t where t.paciente.id = :pacienteId and t.horario > :hoy")
     List<Turno> findByPaciente(@Param("pacienteId") long pacienteId, @Param("hoy") Timestamp hoy);
+
+
+    @Query("select t from Turno t where t.medico.id = :medicoId and t.horario > :hoy")
+    List<Turno> findByMedico(@Param("medicoId") long id, @Param("hoy") Timestamp hoy);
 }

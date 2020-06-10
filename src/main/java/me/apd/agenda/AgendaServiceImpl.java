@@ -56,6 +56,12 @@ public class AgendaServiceImpl implements AgendaService {
     }
 
     @Override
+    public List<Turno> buscarPorMedico(Long id) {
+        Instant hoy = Instant.now();
+        return agendaRepository.findByMedico(id, Timestamp.from(hoy));
+    }
+
+    @Override
     public List<Turno> buscarPorPaciente(long pacienteId) {
         Instant hoy = Instant.now();
         return agendaRepository.findByPaciente(pacienteId, Timestamp.from(hoy));

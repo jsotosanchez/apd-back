@@ -21,4 +21,6 @@ public interface AgendaService {
     Long cancelarTurno(Long turnoId);
 
     List<Turno> buscarDisponiblesPorEspecialidad(Long especialidadId);
+
+    List<Turno> buscarPorMedico(Long id);
 }

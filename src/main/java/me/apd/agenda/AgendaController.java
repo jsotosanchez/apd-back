@@ -83,8 +83,12 @@ public class AgendaController {
     }
 
     @GetMapping("turnos/paciente/{id}")
-    public List<Turno> buscarMisTurnos(@PathVariable Long id) {
+    public List<Turno> buscarPorPaciente(@PathVariable Long id) {
         return agendaService.buscarPorPaciente(id);
     }
 
+    @GetMapping("turnos/medico/{id}")
+    public List<Turno> buscarPorMedico(@PathVariable Long id) {
+        return agendaService.buscarPorMedico(id);
+    }
 }
