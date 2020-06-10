@@ -1,6 +1,5 @@
 package me.apd.notificacion;
 
-import me.apd.usuario.UsuarioRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,7 +11,7 @@ import java.util.stream.StreamSupport;
 public class NotificacionServiceImpl implements NotificacionService {
     private final NotificacionRepository repository;
 
-    public NotificacionServiceImpl(NotificacionRepository repository, UsuarioRepository usuarioRepository) {
+    public NotificacionServiceImpl(NotificacionRepository repository) {
         this.repository = repository;
     }
 
