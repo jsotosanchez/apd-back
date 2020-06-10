@@ -53,24 +53,10 @@ public class AgendaController {
         return agendaService.reservarTurno(paciente.id, turnoId);
     }
 
-//    @PatchMapping("{id}/cancelar")
-//    public Long cancelarTurno(@PathVariable String id, @RequestBody UsuarioView usuario) throws IllegalAccessException {
-//        Turno turno = agendaService.buscarPorId(Long.parseLong(id)).orElseThrow(
-//                IllegalAccessException::new
-//        );
-//        turno.setPaciente(null);
-//
-//        if (usuario.getMatricula().isEmpty()) {
-//            ColaDeEspera colaDeEspera = colaDeEsperaService.buscarPorEspecialidad(turno.getEspecialidad());
-//            turno.setPaciente(colaDeEspera.getPaciente());
-//            agendaService.guardarTurno(turno);
-//            //TO DO: enviar notificacion
-//        } else {
-//            agendaService.eliminarPorId(turno.getId());
-//        }
-//
-//        return turno.getId();
-//    }
+    @PatchMapping("{id}/cancelar")
+    public Long cancelarTurno(@PathVariable(name = "id") Long turnoId) {
+        return agendaService.cancelarTurno(turnoId);
+    }
 
     @PatchMapping("{id}/confirmar")
     public Long confirmarTurno(@PathVariable Long id) throws IllegalAccessException {

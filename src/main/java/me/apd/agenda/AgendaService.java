@@ -17,4 +17,6 @@ public interface AgendaService {
     List<Turno> buscarPorPaciente(long parseLong);
 
     Long reservarTurno(Long usuarioId, Long turnoId);
+
+    Long cancelarTurno(Long turnoId);
 }

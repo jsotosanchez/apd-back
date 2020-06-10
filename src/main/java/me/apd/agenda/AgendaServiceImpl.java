@@ -59,5 +59,11 @@ public class AgendaServiceImpl implements AgendaService {
         return turnoId;
     }
 
+    @Override
+    public Long cancelarTurno(Long turnoId) {
+        agendaRepository.cancelarTurno(turnoId);
+        return turnoId;
+    }
+
 
 }

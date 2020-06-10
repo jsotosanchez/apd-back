@@ -26,4 +26,10 @@ public interface AgendaRepository extends CrudRepository<Turno, Long> {
     @Transactional
     @Query("update Turno t set t.paciente.id = :usuarioId where t.id = :turnoId")
     void reservarTurno(@Param("usuarioId") Long usuarioId, @Param("turnoId") Long turnoId);
+
+
+    @Modifying
+    @Transactional
+    @Query("update Turno t set t.paciente.id = null where t.id = :turnoId")
+    void cancelarTurno(Long turnoId);
 }
