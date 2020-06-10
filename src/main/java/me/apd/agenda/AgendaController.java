@@ -57,9 +57,9 @@ public class AgendaController {
 //    }
 
     @DeleteMapping("{id}")
-    public Long eliminarTurno(@PathVariable String id) {
-        agendaService.eliminarPorId(Long.parseLong(id));
-        return Long.parseLong(id);
+    public Long eliminarTurno(@PathVariable Long id) {
+        agendaService.eliminarPorId(id);
+        return id;
     }
 
 //    @PatchMapping("{id}/reservar")
@@ -93,8 +93,8 @@ public class AgendaController {
 //    }
 
     @PatchMapping("{id}/confirmar")
-    public Long confirmarTurno(@PathVariable String id) throws IllegalAccessException {
-        Turno turno = agendaService.buscarPorId(Long.parseLong(id)).orElseThrow(
+    public Long confirmarTurno(@PathVariable Long id) throws IllegalAccessException {
+        Turno turno = agendaService.buscarPorId(id).orElseThrow(
                 IllegalAccessException::new
         );
         turno.setConfirmado(true);
@@ -104,19 +104,13 @@ public class AgendaController {
     }
 
     @GetMapping("/{especialidadId}/{medicoId}")
-    public List<Horario> buscarTurnosDisponibles(@PathVariable String especialidadId, @PathVariable String medicoId) {
+    public List<Horario> buscarTurnosDisponibles(@PathVariable Long especialidadId, @PathVariable Long medicoId) {
         return agendaService.buscarDisponiblesPorEspecialidadYMedico(especialidadId, medicoId);
     }
 
     @GetMapping("/{id}")
-    public List<Turno> buscarMisTurnos(@PathVariable String id) {
-        return agendaService.buscarPorPaciente(Long.parseLong(id));
+    public List<Turno> buscarMisTurnos(@PathVariable Long id) {
+        return agendaService.buscarPorPaciente(id);
     }
 
-//    @PostMapping("/cola")
-//    public Long agregarAColaDeEspera(@RequestBody ColaEsperaView colaEspera) {
-//        return colaDeEsperaService.agregar(Long.parseLong(colaEspera.getEspecialidadId())
-//                , Long.parseLong(colaEspera.getPacienteId()),
-//                Long.parseLong(colaEspera.getMedicoId())).getId();
-//    }
 }

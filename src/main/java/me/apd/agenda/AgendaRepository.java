@@ -1,6 +1,5 @@
 package me.apd.agenda;
 
-import me.apd.especialidad.Especialidad;
 import me.apd.usuario.Usuario;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -10,7 +9,8 @@ import java.util.List;
 
 @Repository
 public interface AgendaRepository extends CrudRepository<Turno, Long> {
-    List<Horario> findByEspecialidadAndMedicoAndHorarioAfterAndPacienteIsNull(Especialidad especialidad, Usuario medico, Horario hoy);
+//    @Query()
+List<Horario> findByEspecialidadAndMedicoAndHorarioAfterAndPacienteIsNull(Long especialidadId, Long medicoId, Horario hoy);
 
     List<Turno> findByPacienteAndHorarioAfter(Usuario paciente, Instant dia);
 

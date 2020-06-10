@@ -12,7 +12,7 @@ public interface AgendaService {
 
     Iterable<Turno> guardarTodos(List<Turno> turnos);
 
-    List<Horario> buscarDisponiblesPorEspecialidadYMedico(String especialidadId, String medicoId);
+    List<Horario> buscarDisponiblesPorEspecialidadYMedico(Long especialidadId, Long medicoId);
 
     List<Turno> buscarPorPaciente(long parseLong);
 }

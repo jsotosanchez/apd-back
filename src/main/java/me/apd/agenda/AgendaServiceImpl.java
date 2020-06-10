@@ -1,6 +1,5 @@
 package me.apd.agenda;
 
-import me.apd.especialidad.Especialidad;
 import me.apd.usuario.Usuario;
 import org.springframework.stereotype.Service;
 
@@ -40,12 +39,11 @@ public class AgendaServiceImpl implements AgendaService {
     }
 
     @Override
-    public List<Horario> buscarDisponiblesPorEspecialidadYMedico(String especialidadId, String medicoId) {
-        Usuario medico = Usuario.builder().id(Long.parseLong(medicoId)).build();
-        Especialidad especialidad = Especialidad.builder().id(Long.parseLong(especialidadId)).build();
+    public List<Horario> buscarDisponiblesPorEspecialidadYMedico(Long especialidadId, Long medicoId) {
         Horario hoy = Horario.builder().horario(LocalDateTime.now()).build();
 
-        return agendaRepository.findByEspecialidadAndMedicoAndHorarioAfterAndPacienteIsNull(especialidad, medico, hoy);
+        return agendaRepository
+                .findByEspecialidadAndMedicoAndHorarioAfterAndPacienteIsNull(especialidadId, medicoId, hoy);
     }
 
     @Override
