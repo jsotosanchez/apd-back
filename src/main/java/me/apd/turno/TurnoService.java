@@ -1,9 +1,9 @@
-package me.apd.agenda;
+package me.apd.turno;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface AgendaService {
+public interface TurnoService {
     Turno guardarTurno(Turno turno);
 
     void eliminarPorId(Long id);

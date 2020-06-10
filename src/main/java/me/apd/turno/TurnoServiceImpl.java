@@ -1,4 +1,4 @@
-package me.apd.agenda;
+package me.apd.turno;
 
 import org.springframework.stereotype.Service;
 
@@ -8,40 +8,40 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class AgendaServiceImpl implements AgendaService {
+public class TurnoServiceImpl implements TurnoService {
 
-    private final AgendaRepository agendaRepository;
+    private final TurnoRepository turnoRepository;
 
-    public AgendaServiceImpl(AgendaRepository agendaRepository) {
-        this.agendaRepository = agendaRepository;
+    public TurnoServiceImpl(TurnoRepository turnoRepository) {
+        this.turnoRepository = turnoRepository;
     }
 
     @Override
     public Turno guardarTurno(Turno turno) {
-        agendaRepository.save(turno);
+        turnoRepository.save(turno);
         return turno;
     }
 
     @Override
     public void eliminarPorId(Long id) {
-        agendaRepository.deleteById(id);
+        turnoRepository.deleteById(id);
     }
 
     @Override
     public Optional<Turno> buscarPorId(long id) {
-        return agendaRepository.findById(id);
+        return turnoRepository.findById(id);
     }
 
     @Override
     public Iterable<Turno> guardarTodos(List<Turno> turnos) {
-        return agendaRepository.saveAll(turnos);
+        return turnoRepository.saveAll(turnos);
     }
 
     @Override
     public List<Turno> buscarDisponiblesPorEspecialidadYMedico(Long especialidadId, Long medicoId) {
         Instant hoy = Instant.now();
 
-        return agendaRepository
+        return turnoRepository
                 .findByEspecialidadAndMedicoAndHorarioAfterAndPacienteIsNull(especialidadId, medicoId, Timestamp
                         .from(hoy));
 //                .stream().map(t ->t.getHorario().toLocalDateTime()).collect(Collectors
@@ -52,30 +52,30 @@ public class AgendaServiceImpl implements AgendaService {
     public List<Turno> buscarDisponiblesPorEspecialidad(Long especialidadId) {
         Instant hoy = Instant.now();
 
-        return agendaRepository.findByDisponibleEspecialidad(especialidadId, Timestamp.from(hoy));
+        return turnoRepository.findByDisponibleEspecialidad(especialidadId, Timestamp.from(hoy));
     }
 
     @Override
     public List<Turno> buscarPorMedico(Long id) {
         Instant hoy = Instant.now();
-        return agendaRepository.findByMedico(id, Timestamp.from(hoy));
+        return turnoRepository.findByMedico(id, Timestamp.from(hoy));
     }
 
     @Override
     public List<Turno> buscarPorPaciente(long pacienteId) {
         Instant hoy = Instant.now();
-        return agendaRepository.findByPaciente(pacienteId, Timestamp.from(hoy));
+        return turnoRepository.findByPaciente(pacienteId, Timestamp.from(hoy));
     }
 
     @Override
     public Long reservarTurno(Long usuarioId, Long turnoId) {
-        agendaRepository.reservarTurno(usuarioId, turnoId);
+        turnoRepository.reservarTurno(usuarioId, turnoId);
         return turnoId;
     }
 
     @Override
     public Long cancelarTurno(Long turnoId) {
-        agendaRepository.cancelarTurno(turnoId);
+        turnoRepository.cancelarTurno(turnoId);
         return turnoId;
     }
 

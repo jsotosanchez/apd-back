@@ -1,4 +1,4 @@
-package me.apd.agenda;
+package me.apd.turno;
 
 public class UsuarioBody {
     public Long id;

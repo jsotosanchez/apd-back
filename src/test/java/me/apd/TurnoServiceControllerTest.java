@@ -1,10 +1,10 @@
 package me.apd;
 
-import me.apd.agenda.*;
 import me.apd.especialidad.Especialidad;
 import me.apd.especialidad.EspecialidadRepository;
 import me.apd.especialidad.EspecialidadService;
 import me.apd.especialidad.EspecialidadServiceImpl;
+import me.apd.turno.*;
 import me.apd.usuario.Usuario;
 import me.apd.usuario.UsuarioRepository;
 import me.apd.usuario.UsuarioService;
@@ -29,11 +29,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(AgendaController.class)
-public class AgendaServiceControllerTest {
+@WebMvcTest(TurnoController.class)
+public class TurnoServiceControllerTest {
 
     @MockBean
-    private AgendaRepository agendaRepository;
+    private TurnoRepository turnoRepository;
     @MockBean
     private EspecialidadRepository especialidadRepository;
     @MockBean
@@ -45,7 +45,7 @@ public class AgendaServiceControllerTest {
                 .especialidad(Especialidad.builder().id(3L).build())
                 .build();
 
-        doReturn(turno).when(agendaRepository).save(eq(turno));
+        doReturn(turno).when(turnoRepository).save(eq(turno));
 
         mockMvc.perform(post("/agenda/")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -57,7 +57,7 @@ public class AgendaServiceControllerTest {
     public void modificarTurno(@Autowired MockMvc mockMvc) throws Exception {
         Turno turno = Turno.builder().id(1L).build();
 
-        doReturn(turno).when(agendaRepository).save(eq(turno));
+        doReturn(turno).when(turnoRepository).save(eq(turno));
 
         mockMvc.perform(put("/agenda/{id}", "1")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -70,15 +70,15 @@ public class AgendaServiceControllerTest {
         mockMvc.perform(delete("/agenda/{id}", "1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{}")).andDo(print()).andExpect(status().isOk());
-        verify(agendaRepository).deleteById(1L);
+        verify(turnoRepository).deleteById(1L);
     }
 
     @Test
     public void reservarTurno(@Autowired MockMvc mockMvc) throws Exception {
         Turno turno = Turno.builder().id(1L).build();
 
-        doThrow().when(agendaRepository.findById(turno.getId()));
-        doReturn(turno).when(agendaRepository).save(eq(turno));
+        doThrow().when(turnoRepository.findById(turno.getId()));
+        doReturn(turno).when(turnoRepository).save(eq(turno));
 
         mockMvc.perform(put("/agenda/{id}/reservar", "1")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -89,8 +89,8 @@ public class AgendaServiceControllerTest {
     static class Config {
 
         @Bean
-        public AgendaService agenda(AgendaRepository repository) {
-            return new AgendaServiceImpl(repository);
+        public TurnoService agenda(TurnoRepository repository) {
+            return new TurnoServiceImpl(repository);
         }
 
         @Bean

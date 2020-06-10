@@ -1,4 +1,4 @@
-package me.apd.agenda;
+package me.apd.turno;
 
 import lombok.Builder;
 import lombok.Value;

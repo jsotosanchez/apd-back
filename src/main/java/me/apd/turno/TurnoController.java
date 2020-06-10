@@ -1,16 +1,16 @@
-package me.apd.agenda;
+package me.apd.turno;
 
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/agenda")
-public class AgendaController {
-    private final AgendaService agendaService;
+@RequestMapping("/turnos")
+public class TurnoController {
+    private final TurnoService turnoService;
 
-    public AgendaController(AgendaService agenda) {
-        this.agendaService = agenda;
+    public TurnoController(TurnoService agenda) {
+        this.turnoService = agenda;
     }
 
 //    @PostMapping("")
@@ -39,56 +39,56 @@ public class AgendaController {
 //                fechaTurno.plusDays(1);
 //            }
 //        }
-//        agendaService.guardarTodos(turnosCreados);
+//        turnoService.guardarTodos(turnosCreados);
 //    }
 
     @DeleteMapping("{id}")
     public Long eliminarTurno(@PathVariable Long id) {
-        agendaService.eliminarPorId(id);
+        turnoService.eliminarPorId(id);
         return id;
     }
 
     @PatchMapping("{id}/reservar")
     public Long reservarTurno(@PathVariable(name = "id") Long turnoId, @RequestBody UsuarioBody paciente) {
-        return agendaService.reservarTurno(paciente.id, turnoId);
+        return turnoService.reservarTurno(paciente.id, turnoId);
     }
 
     @PatchMapping("{id}/cancelar")
     public Long cancelarTurno(@PathVariable(name = "id") Long turnoId) {
-        return agendaService.cancelarTurno(turnoId);
+        return turnoService.cancelarTurno(turnoId);
     }
 
     @PatchMapping("{id}/confirmar")
     public Long confirmarTurno(@PathVariable Long id) throws IllegalAccessException {
-        Turno turno = agendaService.buscarPorId(id).orElseThrow(
+        Turno turno = turnoService.buscarPorId(id).orElseThrow(
                 IllegalAccessException::new
         );
         turno.setConfirmado(true);
-        Turno confirmado = agendaService.guardarTurno(turno);
+        Turno confirmado = turnoService.guardarTurno(turno);
 
         return confirmado.getId();
     }
 
-    @GetMapping("turnos/especialidad/{especialidadId}/medico/{medicoId}")
+    @GetMapping("especialidad/{especialidadId}/medico/{medicoId}")
     public List<Turno> buscarTurnosDisponibles(@PathVariable Long especialidadId, @PathVariable Long medicoId) {
         if (medicoId == null) {
-            return agendaService.buscarDisponiblesPorEspecialidad(especialidadId);
+            return turnoService.buscarDisponiblesPorEspecialidad(especialidadId);
         }
-        return agendaService.buscarDisponiblesPorEspecialidadYMedico(especialidadId, medicoId);
+        return turnoService.buscarDisponiblesPorEspecialidadYMedico(especialidadId, medicoId);
     }
 
-    @GetMapping("turnos/especialidad/{especialidadId}")
+    @GetMapping("especialidad/{especialidadId}")
     public List<Turno> buscarTurnosDisponibles(@PathVariable Long especialidadId) {
-        return agendaService.buscarDisponiblesPorEspecialidad(especialidadId);
+        return turnoService.buscarDisponiblesPorEspecialidad(especialidadId);
     }
 
-    @GetMapping("turnos/paciente/{id}")
+    @GetMapping("paciente/{id}")
     public List<Turno> buscarPorPaciente(@PathVariable Long id) {
-        return agendaService.buscarPorPaciente(id);
+        return turnoService.buscarPorPaciente(id);
     }
 
-    @GetMapping("turnos/medico/{id}")
+    @GetMapping("medico/{id}")
     public List<Turno> buscarPorMedico(@PathVariable Long id) {
-        return agendaService.buscarPorMedico(id);
+        return turnoService.buscarPorMedico(id);
     }
 }

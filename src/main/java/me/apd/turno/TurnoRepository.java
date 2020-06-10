@@ -1,4 +1,4 @@
-package me.apd.agenda;
+package me.apd.turno;
 
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -11,7 +11,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 @Repository
-public interface AgendaRepository extends CrudRepository<Turno, Long> {
+public interface TurnoRepository extends CrudRepository<Turno, Long> {
     @Query("select t from Turno t " +
             "where t.especialidad.id = :especialidadId and" +
             " t.medico.id = :medicoId and" +
@@ -26,9 +26,6 @@ public interface AgendaRepository extends CrudRepository<Turno, Long> {
             " t.horario > :hoy and" +
             " t.paciente.id = null")
     List<Turno> findByDisponibleEspecialidad(@Param("especialidadId") Long especialidadId, @Param("hoy") Timestamp hoy);
-
-//
-//    List<Horario> findByMedicoAndHorarioBetween(Usuario medico, Instant desde, Instant hasta);
 
     @Modifying
     @Transactional
