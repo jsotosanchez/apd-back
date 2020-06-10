@@ -1,6 +1,5 @@
 package me.apd.agenda;
 
-import me.apd.usuario.Usuario;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -57,10 +56,9 @@ public class AgendaServiceImpl implements AgendaService {
     }
 
     @Override
-    public List<Turno> buscarPorPaciente(long id) {
-        Usuario paciente = Usuario.builder().id(id).build();
+    public List<Turno> buscarPorPaciente(long pacienteId) {
         Instant hoy = Instant.now();
-        return agendaRepository.findByPacienteAndHorarioAfter(paciente, hoy);
+        return agendaRepository.findByPaciente(pacienteId, Timestamp.from(hoy));
     }
 
     @Override
