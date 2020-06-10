@@ -24,8 +24,4 @@ public class EspecialidadServiceImpl implements EspecialidadService {
         return new ArrayList<>(repository.findAllEspecialidadBase());
     }
 
-    @Override
-    public List<EspecialidadBase> buscarPorUsuarioId(Long id) {
-        return repository.findByMedico(id);
-    }
 }

@@ -1,7 +1,6 @@
 package me.apd.especialidad;
 
 import lombok.Value;
-
 @Value
 public
 class EspecialidadBase {

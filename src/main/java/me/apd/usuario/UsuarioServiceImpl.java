@@ -1,5 +1,6 @@
 package me.apd.usuario;
 
+import me.apd.especialidad.Especialidad;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,6 +32,12 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     public List<UsuarioBase> buscarMedicosPorEspecialidadId(Long id) {
         return usuarioRepository.findByEspecialidad(id);
+    }
+
+    @Override
+    public List<Especialidad> buscarEspecialidadesPorMedico(Long id) {
+        return usuarioRepository.findById(id).map(Usuario::getEspecialidades)
+                .orElseThrow(UsuarioNotFoundException::new);
     }
 
 
