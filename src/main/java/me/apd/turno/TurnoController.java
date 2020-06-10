@@ -76,8 +76,7 @@ public class TurnoController {
 
     @GetMapping("especialidad/{especialidadId}")
     public List<TurnoDisponibleView> buscarTurnosDisponibles(@PathVariable Long especialidadId) {
-        List<TurnoDisponibleView> lista = turnoService.buscarDisponiblesPorEspecialidad(especialidadId);
-        return lista;
+        return turnoService.buscarDisponiblesPorEspecialidad(especialidadId);
     }
 
     @GetMapping("paciente/{id}")
@@ -86,7 +85,7 @@ public class TurnoController {
     }
 
     @GetMapping("medico/{id}")
-    public List<Turno> buscarPorMedico(@PathVariable Long id) {
+    public List<TurnoMedicoView> buscarPorMedico(@PathVariable Long id) {
         return turnoService.buscarPorMedico(id);
     }
 }

@@ -44,8 +44,6 @@ public class TurnoServiceImpl implements TurnoService {
         return turnoRepository
                 .findByEspecialidadAndMedicoAndHorarioAfterAndPacienteIsNull(especialidadId, medicoId, Timestamp
                         .from(hoy));
-//                .stream().map(t ->t.getHorario().toLocalDateTime()).collect(Collectors
-//                        .toList());
     }
 
     @Override
@@ -56,7 +54,7 @@ public class TurnoServiceImpl implements TurnoService {
     }
 
     @Override
-    public List<Turno> buscarPorMedico(Long id) {
+    public List<TurnoMedicoView> buscarPorMedico(Long id) {
         Instant hoy = Instant.now();
         return turnoRepository.findByMedico(id, Timestamp.from(hoy));
     }

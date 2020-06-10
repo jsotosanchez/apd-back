@@ -41,7 +41,6 @@ public interface TurnoRepository extends CrudRepository<Turno, Long> {
     @Query("select t from Turno t where t.paciente.id = :pacienteId and t.horario > :hoy")
     List<TurnoPacienteView> findByPaciente(@Param("pacienteId") long pacienteId, @Param("hoy") Timestamp hoy);
 
-
-    @Query("select t from Turno t where t.medico.id = :medicoId and t.horario > :hoy")
-    List<Turno> findByMedico(@Param("medicoId") long id, @Param("hoy") Timestamp hoy);
+    @Query("select t from Turno t left join t.paciente where t.medico.id = :medicoId and t.horario > :hoy")
+    List<TurnoMedicoView> findByMedico(@Param("medicoId") long id, @Param("hoy") Timestamp hoy);
 }

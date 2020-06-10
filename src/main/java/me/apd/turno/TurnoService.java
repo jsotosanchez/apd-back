@@ -22,5 +22,5 @@ public interface TurnoService {
 
     List<TurnoDisponibleView> buscarDisponiblesPorEspecialidad(Long especialidadId);
 
-    List<Turno> buscarPorMedico(Long id);
+    List<TurnoMedicoView> buscarPorMedico(Long id);
 }
