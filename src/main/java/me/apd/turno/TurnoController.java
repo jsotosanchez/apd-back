@@ -71,9 +71,8 @@ public class TurnoController {
     public Map<Instant, List<TurnoDisponibleView>> buscarTurnosDisponibles(@PathVariable Long especialidadId, @PathVariable Long medicoId) {
         List<TurnoDisponibleView> listaDisponibles = turnoService
                 .buscarDisponiblesPorEspecialidadYMedico(especialidadId, medicoId);
-        Map<Instant, List<TurnoDisponibleView>> map = listaDisponibles.stream()
+        return listaDisponibles.stream()
                 .collect(Collectors.groupingBy(this::getDate));
-        return map;
     }
 
     private Instant getDate(TurnoDisponibleView t) {
@@ -91,8 +90,8 @@ public class TurnoController {
         return turnoService.buscarPorPaciente(id);
     }
 
-    @GetMapping("medico/{id}")
-    public List<TurnoMedicoView> buscarPorMedico(@PathVariable Long id) {
-        return turnoService.buscarPorMedico(id);
+    @GetMapping("medico/{id}/dia/{dia}")
+    public List<TurnoMedicoView> buscarPorMedicoYDia(@PathVariable Long id, @PathVariable String dia) {
+        return turnoService.buscarPorMedicoEntreFechas(id, dia);
     }
 }

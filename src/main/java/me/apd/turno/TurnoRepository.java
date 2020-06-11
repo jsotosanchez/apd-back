@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -45,6 +46,6 @@ public interface TurnoRepository extends CrudRepository<Turno, Long> {
     @Query("select t from Turno t where t.paciente.id = :pacienteId and t.horario > :hoy")
     List<TurnoPacienteView> findByPaciente(@Param("pacienteId") long pacienteId, @Param("hoy") Timestamp hoy);
 
-    @Query("select t from Turno t left join t.paciente where t.medico.id = :medicoId and t.horario > :hoy")
-    List<TurnoMedicoView> findByMedico(@Param("medicoId") long id, @Param("hoy") Timestamp hoy);
+    @Query("select t from Turno t left join t.paciente where t.medico.id = :medicoId and t.horario > :dia and t.horario < :diaSiguiente")
+    List<TurnoMedicoView> findByMedicoDatesBetween(@Param("medicoId") long id, @Param("dia") Date hoy, @Param("diaSiguiente") Date diaSiguiente);
 }

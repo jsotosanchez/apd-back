@@ -22,7 +22,7 @@ public interface TurnoService {
 
     List<TurnoDisponibleView> buscarDisponiblesPorEspecialidad(Long especialidadId);
 
-    List<TurnoMedicoView> buscarPorMedico(Long id);
+    List<TurnoMedicoView> buscarPorMedicoEntreFechas(Long id, String fecha);
 
     Long confirmarTurno(Long id);
 }

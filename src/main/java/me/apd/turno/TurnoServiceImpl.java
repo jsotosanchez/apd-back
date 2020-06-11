@@ -2,6 +2,7 @@ package me.apd.turno;
 
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
@@ -54,9 +55,11 @@ public class TurnoServiceImpl implements TurnoService {
     }
 
     @Override
-    public List<TurnoMedicoView> buscarPorMedico(Long id) {
-        Instant hoy = Instant.now();
-        return turnoRepository.findByMedico(id, Timestamp.from(hoy));
+    public List<TurnoMedicoView> buscarPorMedicoEntreFechas(Long id, String fecha) {
+        Date dia = Date.valueOf(fecha);
+        Date diaSiguiente = new java.sql.Date(dia.getTime() + 24 * 60 * 60 * 1000);
+
+        return turnoRepository.findByMedicoDatesBetween(id, dia, diaSiguiente);
     }
 
     @Override
