@@ -2,8 +2,8 @@ package me.apd.turno;
 
 import org.springframework.web.bind.annotation.*;
 
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -12,6 +12,8 @@ import java.util.stream.Collectors;
 @RequestMapping("/turnos")
 public class TurnoController {
     private final TurnoService turnoService;
+
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
     public TurnoController(TurnoService agenda) {
         this.turnoService = agenda;
@@ -67,22 +69,25 @@ public class TurnoController {
         return turnoService.confirmarTurno(id);
     }
 
-    @GetMapping("especialidad/{especialidadId}/medico/{medicoId}")
-    public Map<Instant, List<TurnoDisponibleView>> buscarTurnosDisponibles(@PathVariable Long especialidadId, @PathVariable Long medicoId) {
+    @GetMapping("especialidades/{especialidadId}/medicos/{medicoId}")
+    public Map<String, List<TurnoDisponibleView>> buscarTurnosDisponibles(@PathVariable Long especialidadId, @PathVariable Long medicoId) {
         List<TurnoDisponibleView> listaDisponibles = turnoService
                 .buscarDisponiblesPorEspecialidadYMedico(especialidadId, medicoId);
         return listaDisponibles.stream()
                 .collect(Collectors.groupingBy(this::getDate));
     }
 
-    private Instant getDate(TurnoDisponibleView t) {
+    private String getDate(TurnoDisponibleView t) {
 
-        return t.getHorario().truncatedTo(ChronoUnit.DAYS);
+        return sdf.format(Date.from(t.getHorario()));
     }
 
-    @GetMapping("especialidad/{especialidadId}")
-    public List<TurnoDisponibleView> buscarTurnosDisponibles(@PathVariable Long especialidadId) {
-        return turnoService.buscarDisponiblesPorEspecialidad(especialidadId);
+    @GetMapping("especialidades/{especialidadId}")
+    public Map<String, List<TurnoDisponibleView>> buscarTurnosDisponibles(@PathVariable Long especialidadId) {
+        List<TurnoDisponibleView> listaDisponibles = turnoService
+                .buscarDisponiblesPorEspecialidad(especialidadId);
+        return listaDisponibles.stream()
+                .collect(Collectors.groupingBy(this::getDate));
     }
 
     @GetMapping("paciente/{id}")
