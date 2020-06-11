@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
-@RequestMapping("/usuario")
+@RequestMapping("/usuarios")
 public class UsuarioController {
     private final UsuarioService usuarioService;
 
@@ -29,7 +29,7 @@ public class UsuarioController {
         return usuarioService.buscarEspecialidadesPorMedico(id);
     }
 
-    @GetMapping("especialidades/{id}")
+    @GetMapping("/especialidades/{id}")
     public List<UsuarioBase> medicosPorEspecialidad(@PathVariable Long id) {
         return usuarioService.buscarMedicosPorEspecialidadId(id);
     }
