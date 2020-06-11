@@ -16,4 +16,7 @@ public interface TurnoPacienteView {
 
     @Value("#{target.especialidad.descripcion}")
     String getEspecialidad();
+
+    @Value("#{target.confirmado}")
+    Boolean getConfirmado();
 }
