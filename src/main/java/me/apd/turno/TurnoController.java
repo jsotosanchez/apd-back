@@ -2,7 +2,11 @@ package me.apd.turno;
 
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/turnos")
@@ -59,19 +63,22 @@ public class TurnoController {
     }
 
     @PatchMapping("{id}/confirmar")
-    public Long confirmarTurno(@PathVariable Long id) throws IllegalAccessException {
-        Turno turno = turnoService.buscarPorId(id).orElseThrow(
-                IllegalAccessException::new
-        );
-        turno.setConfirmado(true);
-        Turno confirmado = turnoService.guardarTurno(turno);
-
-        return confirmado.getId();
+    public Long confirmarTurno(@PathVariable Long id) {
+        return turnoService.confirmarTurno(id);
     }
 
     @GetMapping("especialidad/{especialidadId}/medico/{medicoId}")
-    public List<TurnoDisponibleView> buscarTurnosDisponibles(@PathVariable Long especialidadId, @PathVariable Long medicoId) {
-        return turnoService.buscarDisponiblesPorEspecialidadYMedico(especialidadId, medicoId);
+    public Map<Instant, List<TurnoDisponibleView>> buscarTurnosDisponibles(@PathVariable Long especialidadId, @PathVariable Long medicoId) {
+        List<TurnoDisponibleView> listaDisponibles = turnoService
+                .buscarDisponiblesPorEspecialidadYMedico(especialidadId, medicoId);
+        Map<Instant, List<TurnoDisponibleView>> map = listaDisponibles.stream()
+                .collect(Collectors.groupingBy(this::getDate));
+        return map;
+    }
+
+    private Instant getDate(TurnoDisponibleView t) {
+
+        return t.getHorario().truncatedTo(ChronoUnit.DAYS);
     }
 
     @GetMapping("especialidad/{especialidadId}")

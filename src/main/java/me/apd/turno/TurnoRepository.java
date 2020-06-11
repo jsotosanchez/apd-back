@@ -32,6 +32,10 @@ public interface TurnoRepository extends CrudRepository<Turno, Long> {
     @Query("update Turno t set t.paciente.id = :usuarioId where t.id = :turnoId")
     void reservarTurno(@Param("usuarioId") Long usuarioId, @Param("turnoId") Long turnoId);
 
+    @Modifying
+    @Transactional
+    @Query("update Turno t set t.confirmado = 1 where t.id = :turnoId")
+    void confirmarTurno(Long turnoId);
 
     @Modifying
     @Transactional

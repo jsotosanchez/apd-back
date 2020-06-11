@@ -60,6 +60,12 @@ public class TurnoServiceImpl implements TurnoService {
     }
 
     @Override
+    public Long confirmarTurno(Long id) {
+        turnoRepository.confirmarTurno(id);
+        return id;
+    }
+
+    @Override
     public List<TurnoPacienteView> buscarPorPaciente(long pacienteId) {
         Instant hoy = Instant.now();
         return turnoRepository.findByPaciente(pacienteId, Timestamp.from(hoy));
