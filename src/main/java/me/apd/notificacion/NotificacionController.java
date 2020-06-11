@@ -20,8 +20,7 @@ public class NotificacionController {
 
     @PatchMapping("/{id}/marcarLeida")
     public Long marcarLeida(@PathVariable Long id) {
-        Notificacion notificacion = notificacionService.buscarPorId(id).orElseThrow(NotificacionNotFoundException::new);
-        return notificacionService.marcarLeida(notificacion).getId();
+        return notificacionService.marcarLeida(id);
     }
 
 }

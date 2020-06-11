@@ -20,9 +20,9 @@ public class NotificacionServiceImpl implements NotificacionService {
         return repository.findById(id);
     }
 
-    public Notificacion marcarLeida(Notificacion notificacion) {
-        notificacion.setLeida(true);
-        return repository.save(notificacion);
+    public Long marcarLeida(Long id) {
+        repository.marcarLeida(id);
+        return id;
     }
 
     @Override

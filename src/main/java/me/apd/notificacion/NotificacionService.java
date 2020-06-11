@@ -6,7 +6,7 @@ import java.util.Optional;
 public interface NotificacionService {
     Optional<Notificacion> buscarPorId(long parseLong);
 
-    Notificacion marcarLeida(Notificacion notificacion);
+    Long marcarLeida(Long notificacion);
 
     List<Notificacion> buscarTodas();
 
