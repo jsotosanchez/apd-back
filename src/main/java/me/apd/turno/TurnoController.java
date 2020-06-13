@@ -3,9 +3,7 @@ package me.apd.turno;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -54,6 +52,11 @@ public class TurnoController {
         return id;
     }
 
+    @DeleteMapping("/medico/{id}/dia/{dia}")
+    public void eliminarTurnosDelDia(@PathVariable Long id, @PathVariable String dia) {
+        turnoService.eliminarPorDia(id, dia);
+    }
+
     @PatchMapping("{id}/reservar")
     public Long reservarTurno(@PathVariable(name = "id") Long turnoId, @RequestBody UsuarioBody paciente) {
         return turnoService.reservarTurno(paciente.id, turnoId);
@@ -78,16 +81,25 @@ public class TurnoController {
     }
 
     private String getDate(TurnoDisponibleView t) {
+        return sdf.format(Date.from(t.getHorario()));
+    }
 
+    private String getDate(DiaMedicoView t) {
         return sdf.format(Date.from(t.getHorario()));
     }
 
     @GetMapping("especialidades/{especialidadId}")
-    public Map<String, List<TurnoDisponibleView>> buscarTurnosDisponibles(@PathVariable Long especialidadId) {
+    public Map<Long, Map<String, List<TurnoDisponibleView>>> buscarTurnosDisponibles(@PathVariable Long especialidadId) {
         List<TurnoDisponibleView> listaDisponibles = turnoService
                 .buscarDisponiblesPorEspecialidad(especialidadId);
-        return listaDisponibles.stream()
-                .collect(Collectors.groupingBy(this::getDate));
+        Map<Long, List<TurnoDisponibleView>> agrupadosMedico = listaDisponibles.stream()
+                .collect(Collectors.groupingBy(TurnoDisponibleView::getMedicoId));
+        return agrupadosMedico
+                .entrySet().stream().map(e -> {
+                    Map<String, List<TurnoDisponibleView>> fechas = e.getValue().stream()
+                            .collect(Collectors.groupingBy(this::getDate));
+                    return new AbstractMap.SimpleImmutableEntry<>(e.getKey(), fechas);
+                }).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (a, b) -> a, LinkedHashMap::new));
     }
 
     @GetMapping("paciente/{id}")
@@ -95,8 +107,13 @@ public class TurnoController {
         return turnoService.buscarPorPaciente(id);
     }
 
+    @GetMapping("medico/{id}/dias")
+    public Set<String> buscarDiasPorMedico(@PathVariable Long id) {
+        return turnoService.buscarPorMedico(id).stream().map(this::getDate).collect(Collectors.toSet());
+    }
+
     @GetMapping("medico/{id}/dia/{dia}")
-    public List<TurnoMedicoView> buscarPorMedicoYDia(@PathVariable Long id, @PathVariable String dia) {
+    public List<TurnoMedicoView> buscarPorMedicoyDia(@PathVariable Long id, @PathVariable String dia) {
         return turnoService.buscarPorMedicoEntreFechas(id, dia);
     }
 }

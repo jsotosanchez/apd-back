@@ -69,6 +69,21 @@ public class TurnoServiceImpl implements TurnoService {
     }
 
     @Override
+    public List<DiaMedicoView> buscarPorMedico(Long id) {
+        Instant hoy = Instant.now();
+        return turnoRepository.findHorariosByMedico(id, Timestamp.from(hoy));
+    }
+
+    @Override
+    public void eliminarPorDia(Long id, String fecha) {
+
+        Date dia = Date.valueOf(fecha);
+        Date diaSiguiente = new java.sql.Date(dia.getTime() + 24 * 60 * 60 * 1000);
+
+        turnoRepository.deleteByMedicoAndDia(id, dia, diaSiguiente);
+    }
+
+    @Override
     public List<TurnoPacienteView> buscarPorPaciente(long pacienteId) {
         Instant hoy = Instant.now();
         return turnoRepository.findByPaciente(pacienteId, Timestamp.from(hoy));

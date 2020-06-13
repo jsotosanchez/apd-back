@@ -25,4 +25,8 @@ public interface TurnoService {
     List<TurnoMedicoView> buscarPorMedicoEntreFechas(Long id, String fecha);
 
     Long confirmarTurno(Long id);
+
+    List<DiaMedicoView> buscarPorMedico(Long id);
+
+    void eliminarPorDia(Long id, String dia);
 }

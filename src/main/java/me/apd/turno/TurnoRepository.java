@@ -36,16 +36,23 @@ public interface TurnoRepository extends CrudRepository<Turno, Long> {
     @Modifying
     @Transactional
     @Query("update Turno t set t.confirmado = 1 where t.id = :turnoId")
-    void confirmarTurno(Long turnoId);
+    void confirmarTurno(@Param("turnoId") Long turnoId);
 
     @Modifying
     @Transactional
     @Query("update Turno t set t.paciente.id = null where t.id = :turnoId")
-    void cancelarTurno(Long turnoId);
+    void cancelarTurno(@Param("turnoId") Long turnoId);
 
     @Query("select t from Turno t where t.paciente.id = :pacienteId and t.horario > :hoy")
     List<TurnoPacienteView> findByPaciente(@Param("pacienteId") long pacienteId, @Param("hoy") Timestamp hoy);
 
     @Query("select t from Turno t left join t.paciente where t.medico.id = :medicoId and t.horario > :dia and t.horario < :diaSiguiente")
     List<TurnoMedicoView> findByMedicoDatesBetween(@Param("medicoId") long id, @Param("dia") Date hoy, @Param("diaSiguiente") Date diaSiguiente);
+
+    @Query("select t from Turno t where t.medico.id = :medicoId and t.horario > :hoy")
+    List<DiaMedicoView> findHorariosByMedico(@Param("medicoId") Long id, @Param("hoy") Timestamp hoy);
+
+    @Modifying
+    @Query("delete from Turno t where t.medico.id = :medicoId and t.horario > :dia and t.horario < :diaSiguiente")
+    void deleteByMedicoAndDia(@Param("medicoId") long id, @Param("dia") Date hoy, @Param("diaSiguiente") Date diaSiguiente);
 }
