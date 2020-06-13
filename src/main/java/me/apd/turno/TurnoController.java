@@ -72,14 +72,6 @@ public class TurnoController {
         return turnoService.confirmarTurno(id);
     }
 
-    @GetMapping("especialidades/{especialidadId}/medicos/{medicoId}")
-    public Map<String, List<TurnoDisponibleView>> buscarTurnosDisponibles(@PathVariable Long especialidadId, @PathVariable Long medicoId) {
-        List<TurnoDisponibleView> listaDisponibles = turnoService
-                .buscarDisponiblesPorEspecialidadYMedico(especialidadId, medicoId);
-        return listaDisponibles.stream()
-                .collect(Collectors.groupingBy(this::getDate));
-    }
-
     private String getDate(TurnoDisponibleView t) {
         return sdf.format(Date.from(t.getHorario()));
     }
