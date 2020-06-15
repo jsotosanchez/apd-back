@@ -1,8 +1,19 @@
 package me.apd.turno;
 
+import me.apd.especialidad.Especialidad;
+import me.apd.especialidad.EspecialidadNotFoundException;
+import me.apd.especialidad.EspecialidadService;
+import me.apd.usuario.Usuario;
+import me.apd.usuario.UsuarioNotFoundException;
+import me.apd.usuario.UsuarioService;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -10,41 +21,51 @@ import java.util.stream.Collectors;
 @RequestMapping("/turnos")
 public class TurnoController {
     private final TurnoService turnoService;
+    final DateTimeFormatter formatter = DateTimeFormatter
+            .ofPattern("yyyy-MM-dd HH:mm")
+            .withZone(ZoneId.systemDefault());
+    private final UsuarioService usuarioService;
 
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    private final EspecialidadService especialidadService;
 
-    public TurnoController(TurnoService agenda) {
+    public TurnoController(TurnoService agenda, UsuarioService usuarioService, EspecialidadService especialidadService) {
         this.turnoService = agenda;
+        this.usuarioService = usuarioService;
+        this.especialidadService = especialidadService;
     }
 
-//    @PostMapping("")
-//    public void generarAgenda(@RequestBody AgendaView body) {
-//
-//        LocalDateTime fechaFin = LocalDateTime.parse(body.getFechaFin() + "T" + body.getHoraInicio());
-//        LocalDateTime fechaInicial = LocalDateTime.parse(body.getFechaInicio() + "T" + body.getHoraInicio());
-//        LocalDateTime fechaTurno = LocalDateTime.parse(body.getFechaInicio() + "T" + body.getHoraInicio());
-//        LocalDateTime horaFin = LocalDateTime.parse(body.getHoraFin());
-//        List<Turno> turnosCreados = new ArrayList<>();
-//        while (fechaTurno.isBefore(fechaFin)) {
-//            Turno turnoNuevo = Turno.builder()
-//                    .medico(Usuario.builder()
-//                            .id(Long.parseLong(body.getMedicoId()))
-//                            .build())
-//                    .especialidad(Especialidad.builder()
-//                            .id(Long.parseLong(body.getEspecialidadId()))
-//                            .build())
-//                    .horario(fechaTurno)
-//                    .build();
-//            turnosCreados.add(turnoNuevo);
-//
-//            fechaTurno.plusMinutes(30);
-//            if (fechaTurno.getHour() > horaFin.getHour() && fechaTurno.getMinute() > horaFin.getMinute()) {
-//                fechaTurno = fechaInicial;
-//                fechaTurno.plusDays(1);
-//            }
-//        }
-//        turnoService.guardarTodos(turnosCreados);
-//    }
+    @PostMapping("")
+    public ResponseView generarAgenda(@RequestBody AgendaBody body) {
+
+        Usuario medico = usuarioService.buscarPorId(body.medicoId).orElseThrow(UsuarioNotFoundException::new);
+        Especialidad especialidad = especialidadService.buscarPorId(body.especialidadId)
+                .orElseThrow(EspecialidadNotFoundException::new);
+        Instant fechaFin = Instant.from(formatter.parse(body.getFechaFin() + " " + body.getHoraFin()));
+        Instant fechaTurno = Instant.from(formatter.parse(body.getFechaInicio() + " " + body.getHoraInicio()));
+        Instant horaLimite = Instant.from(formatter.parse(body.getFechaInicio() + " " + body.getHoraFin()));
+        Instant horaInicio = Instant.from(formatter.parse(body.getFechaInicio() + " " + body.getHoraInicio()));
+
+        List<Turno> turnosCreados = new ArrayList<>();
+
+        while (fechaTurno.isBefore(fechaFin)) {
+            while (fechaTurno.isBefore(horaLimite)) {
+                Turno turnoNuevo = Turno.builder()
+                        .medico(medico)
+                        .especialidad(especialidad)
+                        .horario(Timestamp.from(fechaTurno))
+                        .confirmado(false)
+                        .build();
+                turnosCreados.add(turnoNuevo);
+                fechaTurno = fechaTurno.plus(1, ChronoUnit.HOURS);
+            }
+            horaLimite = horaLimite.plus(1, ChronoUnit.DAYS);
+            horaInicio = horaInicio.plus(1, ChronoUnit.DAYS);
+            fechaTurno = horaInicio;
+        }
+        turnoService.guardarTodos(turnosCreados);
+        return new ResponseView("Se ha cargado tu agenda exitosamente");
+    }
 
     @DeleteMapping("{id}")
     public Long eliminarTurno(@PathVariable Long id) {
