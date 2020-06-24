@@ -1,8 +1,8 @@
 spring:
   datasource:
     url: ${JDBC_DATABASE_URL:jdbc:sqlserver://localhost:1433;databaseName=APD}
-    username: sa
-    password: password
+    username: user
+    password: pass
     hikari:
       connection-timeout: 30000
       maximum-pool-size: 10
