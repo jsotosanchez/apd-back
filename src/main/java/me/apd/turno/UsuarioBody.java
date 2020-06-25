@@ -1,8 +1,10 @@
 package me.apd.turno;
 
-import lombok.Value;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Value
+@Data
+@NoArgsConstructor
 public class UsuarioBody {
     public Long id;
 }

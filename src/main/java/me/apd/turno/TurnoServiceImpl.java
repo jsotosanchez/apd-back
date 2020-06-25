@@ -5,6 +5,9 @@ import org.springframework.stereotype.Service;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -81,6 +84,13 @@ public class TurnoServiceImpl implements TurnoService {
         Date diaSiguiente = new java.sql.Date(dia.getTime() + 24 * 60 * 60 * 1000);
 
         turnoRepository.deleteByMedicoAndDia(id, dia, diaSiguiente);
+    }
+
+    @Override
+    public List<TurnoPacienteView> buscarPorPacienteYDia(Long id, Instant horario) {
+        Timestamp time = Timestamp.from(LocalDateTime.ofInstant(horario, ZoneOffset.ofHours(0)).plusDays(1)
+                .toInstant(ZoneOffset.ofHours(0)).truncatedTo(ChronoUnit.DAYS));
+        return turnoRepository.findByPacienteAndDia(id, Timestamp.from(horario.truncatedTo(ChronoUnit.DAYS)), time);
     }
 
     @Override

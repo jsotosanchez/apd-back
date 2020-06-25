@@ -80,6 +80,16 @@ public class TurnoController {
 
     @PatchMapping("{id}/reservar")
     public Long reservarTurno(@PathVariable(name = "id") Long turnoId, @RequestBody UsuarioBody paciente) {
+        Turno turno = turnoService.buscarPorId(turnoId).orElseThrow(TurnoNotFoundException::new);
+        List<TurnoPacienteView> turnoPacienteViews = turnoService
+                .buscarPorPacienteYDia(paciente.id, turno.getHorario().toInstant());
+
+        turnoPacienteViews.forEach(t -> {
+            if (t.getEspecialidad().equals(turno.getEspecialidad().getDescripcion())) {
+                throw new EspecialidadRepetidaEnUnDiaException();
+            }
+        });
+
         return turnoService.reservarTurno(paciente.id, turnoId);
     }
 
