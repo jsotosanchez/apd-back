@@ -1,12 +1,12 @@
 package me.apd.turno;
 
+import me.apd.especialidad.Especialidad;
+import me.apd.usuario.Usuario;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.sql.Timestamp;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+import java.time.*;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
@@ -111,5 +111,25 @@ public class TurnoServiceImpl implements TurnoService {
         return turnoId;
     }
 
-
+    @Override
+    public void cargarHorarios(Usuario medico, Especialidad especialidad, Instant fechaFin, Instant fechaTurno, Instant horaLimite, Instant horaInicio, List<Turno> turnosCreados, TurnoController turnoController) {
+        while (fechaTurno.isBefore(fechaFin)) {
+            DayOfWeek day = fechaTurno.atZone(ZoneId.systemDefault()).getDayOfWeek();
+            if (!(day.equals(DayOfWeek.SATURDAY) || day.equals(DayOfWeek.SUNDAY)))
+                while (fechaTurno.isBefore(horaLimite)) {
+                    Turno turnoNuevo = Turno.builder()
+                            .medico(medico)
+                            .especialidad(especialidad)
+                            .horario(Timestamp.from(fechaTurno))
+                            .confirmado(false)
+                            .build();
+                    turnosCreados.add(turnoNuevo);
+                    fechaTurno = fechaTurno.plus(1, ChronoUnit.HOURS);
+                }
+            horaLimite = horaLimite.plus(1, ChronoUnit.DAYS);
+            horaInicio = horaInicio.plus(1, ChronoUnit.DAYS);
+            fechaTurno = horaInicio;
+        }
+        guardarTodos(turnosCreados);
+    }
 }

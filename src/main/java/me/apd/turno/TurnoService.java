@@ -1,5 +1,8 @@
 package me.apd.turno;
 
+import me.apd.especialidad.Especialidad;
+import me.apd.usuario.Usuario;
+
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
@@ -32,4 +35,6 @@ public interface TurnoService {
     void eliminarPorDia(Long id, String dia);
 
     List<TurnoPacienteView> buscarPorPacienteYDia(Long id, Instant horario);
+
+    void cargarHorarios(Usuario medico, Especialidad especialidad, Instant fechaFin, Instant fechaTurno, Instant horaLimite, Instant horaInicio, List<Turno> turnosCreados, TurnoController turnoController);
 }

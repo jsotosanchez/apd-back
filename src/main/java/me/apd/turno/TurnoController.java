@@ -10,12 +10,10 @@ import me.apd.usuario.UsuarioService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -53,22 +51,8 @@ public class TurnoController {
 
         List<Turno> turnosCreados = new ArrayList<>();
 
-        while (fechaTurno.isBefore(fechaFin)) {
-            while (fechaTurno.isBefore(horaLimite)) {
-                Turno turnoNuevo = Turno.builder()
-                        .medico(medico)
-                        .especialidad(especialidad)
-                        .horario(Timestamp.from(fechaTurno))
-                        .confirmado(false)
-                        .build();
-                turnosCreados.add(turnoNuevo);
-                fechaTurno = fechaTurno.plus(1, ChronoUnit.HOURS);
-            }
-            horaLimite = horaLimite.plus(1, ChronoUnit.DAYS);
-            horaInicio = horaInicio.plus(1, ChronoUnit.DAYS);
-            fechaTurno = horaInicio;
-        }
-        turnoService.guardarTodos(turnosCreados);
+        turnoService
+                .cargarHorarios(medico, especialidad, fechaFin, fechaTurno, horaLimite, horaInicio, turnosCreados, this);
         return new ResponseView("Se ha cargado tu agenda exitosamente");
     }
 
