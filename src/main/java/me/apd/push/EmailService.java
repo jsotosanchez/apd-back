@@ -1,6 +1,5 @@
 package me.apd.push;
 
-import lombok.var;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.http.ResponseEntity;

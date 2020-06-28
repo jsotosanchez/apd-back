@@ -10,6 +10,7 @@ import me.apd.usuario.UsuarioService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -39,6 +40,7 @@ public class TurnoController {
     }
 
     @PostMapping("")
+    @RolesAllowed("MEDICO")
     public ResponseView generarAgenda(@RequestBody AgendaBody body) {
 
         Usuario medico = usuarioService.buscarPorId(body.medicoId).orElseThrow(UsuarioNotFoundException::new);
@@ -57,17 +59,20 @@ public class TurnoController {
     }
 
     @DeleteMapping("{id}")
+    @RolesAllowed("MEDICO")
     public Long eliminarTurno(@PathVariable Long id) {
         turnoService.eliminarPorId(id);
         return id;
     }
 
     @DeleteMapping("/medico/{id}/dia/{dia}")
+    @RolesAllowed("MEDICO")
     public void eliminarTurnosDelDia(@PathVariable Long id, @PathVariable String dia) {
         turnoService.eliminarPorDia(id, dia);
     }
 
     @PatchMapping("{id}/reservar")
+    @RolesAllowed({"MEDICO", "PACIENTE"})
     public Long reservarTurno(@PathVariable(name = "id") Long turnoId, @RequestBody UsuarioBody paciente) {
         Turno turno = turnoService.buscarPorId(turnoId).orElseThrow(TurnoNotFoundException::new);
         List<TurnoPacienteView> turnoPacienteViews = turnoService
@@ -83,12 +88,14 @@ public class TurnoController {
     }
 
     @PatchMapping("{id}/cancelar")
+    @RolesAllowed({"MEDICO", "PACIENTE"})
     public Long cancelarTurno(@PathVariable(name = "id") Long turnoId) {
         notificationService.send(to, "Se cancelo tu turno subject", "Se cancelo tu turno body");
         return turnoService.cancelarTurno(turnoId);
     }
 
     @PatchMapping("{id}/confirmar")
+    @RolesAllowed("PACIENTE")
     public Long confirmarTurno(@PathVariable Long id) {
         return turnoService.confirmarTurno(id);
     }
@@ -102,6 +109,7 @@ public class TurnoController {
     }
 
     @GetMapping("especialidades/{especialidadId}")
+    @RolesAllowed({"MEDICO", "PACIENTE"})
     public Map<Long, Map<String, List<TurnoDisponibleView>>> buscarTurnosDisponibles(@PathVariable Long especialidadId) {
         List<TurnoDisponibleView> listaDisponibles = turnoService
                 .buscarDisponiblesPorEspecialidad(especialidadId);
@@ -116,16 +124,19 @@ public class TurnoController {
     }
 
     @GetMapping("paciente/{id}")
+    @RolesAllowed({"MEDICO", "PACIENTE"})
     public List<TurnoPacienteView> buscarPorPaciente(@PathVariable Long id) {
         return turnoService.buscarPorPaciente(id);
     }
 
     @GetMapping("medico/{id}/dias")
+    @RolesAllowed("MEDICO")
     public Set<String> buscarDiasPorMedico(@PathVariable Long id) {
         return turnoService.buscarPorMedico(id).stream().map(this::getDate).collect(Collectors.toSet());
     }
 
     @GetMapping("medico/{id}/dia/{dia}")
+    @RolesAllowed("MEDICO")
     public List<TurnoMedicoView> buscarPorMedicoyDia(@PathVariable Long id, @PathVariable String dia) {
         return turnoService.buscarPorMedicoEntreFechas(id, dia);
     }
