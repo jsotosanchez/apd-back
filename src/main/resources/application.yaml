@@ -20,3 +20,7 @@ mail:
   apiKey: ${MAILGUN_API_KEY}
   domain: ${MAILGUN_DOMAIN}
   from: mail
+twilio:
+  account: ${TWILIO_ACCOUNT}
+  key: ${TWILIO_KEY}
+  from: ${TWILIO_FROM}

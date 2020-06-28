@@ -1,12 +1,14 @@
 package me.apd.turno;
 
-import me.apd.email.EmailService;
 import me.apd.especialidad.Especialidad;
 import me.apd.especialidad.EspecialidadNotFoundException;
 import me.apd.especialidad.EspecialidadService;
+import me.apd.push.EmailService;
+import me.apd.push.NotificacionService;
 import me.apd.usuario.Usuario;
 import me.apd.usuario.UsuarioNotFoundException;
 import me.apd.usuario.UsuarioService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
@@ -26,17 +28,17 @@ public class TurnoController {
             .ofPattern("yyyy-MM-dd HH:mm")
             .withZone(ZoneId.systemDefault());
     private final UsuarioService usuarioService;
-
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     private final EspecialidadService especialidadService;
+    private final NotificacionService notificationService;
+    @Value("twilio.from")
+    private String to;
 
-    private final EmailService emailService;
-
-    public TurnoController(TurnoService agenda, UsuarioService usuarioService, EspecialidadService especialidadService, EmailService emailService) {
+    public TurnoController(TurnoService agenda, UsuarioService usuarioService, EspecialidadService especialidadService, EmailService notificationService) {
         this.turnoService = agenda;
         this.usuarioService = usuarioService;
         this.especialidadService = especialidadService;
-        this.emailService = emailService;
+        this.notificationService = notificationService;
     }
 
     @PostMapping("")
@@ -99,7 +101,7 @@ public class TurnoController {
 
     @PatchMapping("{id}/cancelar")
     public Long cancelarTurno(@PathVariable(name = "id") Long turnoId) {
-        emailService.send("email@gmail.com", "Se cancelo tu turno subject", "Se cancelo tu turno body");
+        notificationService.send(to, "Se cancelo tu turno subject", "Se cancelo tu turno body");
         return turnoService.cancelarTurno(turnoId);
     }
 

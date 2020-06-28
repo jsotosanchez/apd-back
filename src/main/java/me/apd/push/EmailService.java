@@ -1,9 +1,8 @@
-package me.apd.email;
+package me.apd.push;
 
 import lombok.var;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -11,8 +10,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 import java.util.HashMap;
 
-@Service
-public class EmailService {
+public class EmailService implements NotificacionService {
     private static final String API_URL = "https://api:{API_KEY}@api.mailgun.net/v2/{domain}/messages";
     private final String apiKey;
     private final String domain;
@@ -28,6 +26,7 @@ public class EmailService {
         this.restTemplate = restTemplate;
     }
 
+    @Override
     public void send(String to, String subject, String body) {
         UriComponents uriComponents = UriComponentsBuilder.newInstance().host(server).path(API_URL)
                 .fragment(apiKey).fragment(domain).build();
