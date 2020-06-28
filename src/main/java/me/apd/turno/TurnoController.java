@@ -1,5 +1,6 @@
 package me.apd.turno;
 
+import me.apd.email.EmailService;
 import me.apd.especialidad.Especialidad;
 import me.apd.especialidad.EspecialidadNotFoundException;
 import me.apd.especialidad.EspecialidadService;
@@ -29,10 +30,13 @@ public class TurnoController {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     private final EspecialidadService especialidadService;
 
-    public TurnoController(TurnoService agenda, UsuarioService usuarioService, EspecialidadService especialidadService) {
+    private final EmailService emailService;
+
+    public TurnoController(TurnoService agenda, UsuarioService usuarioService, EspecialidadService especialidadService, EmailService emailService) {
         this.turnoService = agenda;
         this.usuarioService = usuarioService;
         this.especialidadService = especialidadService;
+        this.emailService = emailService;
     }
 
     @PostMapping("")
@@ -95,6 +99,7 @@ public class TurnoController {
 
     @PatchMapping("{id}/cancelar")
     public Long cancelarTurno(@PathVariable(name = "id") Long turnoId) {
+        emailService.send("email@gmail.com", "Se cancelo tu turno subject", "Se cancelo tu turno body");
         return turnoService.cancelarTurno(turnoId);
     }
 
