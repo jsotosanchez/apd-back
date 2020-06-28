@@ -3,7 +3,6 @@ package me.apd.turno;
 import me.apd.especialidad.Especialidad;
 import me.apd.especialidad.EspecialidadNotFoundException;
 import me.apd.especialidad.EspecialidadService;
-import me.apd.push.EmailService;
 import me.apd.push.NotificacionService;
 import me.apd.usuario.Usuario;
 import me.apd.usuario.UsuarioNotFoundException;
@@ -31,10 +30,10 @@ public class TurnoController {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     private final EspecialidadService especialidadService;
     private final NotificacionService notificationService;
-    @Value("twilio.from")
+    @Value("${twilio.to}")
     private String to;
 
-    public TurnoController(TurnoService agenda, UsuarioService usuarioService, EspecialidadService especialidadService, EmailService notificationService) {
+    public TurnoController(TurnoService agenda, UsuarioService usuarioService, EspecialidadService especialidadService, NotificacionService notificationService) {
         this.turnoService = agenda;
         this.usuarioService = usuarioService;
         this.especialidadService = especialidadService;

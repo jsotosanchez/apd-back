@@ -24,3 +24,5 @@ twilio:
   account: ${TWILIO_ACCOUNT}
   key: ${TWILIO_KEY}
   from: ${TWILIO_FROM}
+  to: ${TWILIO_TO}
+notificacion: log
