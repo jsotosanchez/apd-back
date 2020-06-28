@@ -34,9 +34,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .httpBasic()
-//                .authorizeRequests()
-//                .antMatchers("/turnos/*").hasAnyRole("MEDICO","PACIENTE")
-//                .anyRequest().denyAll()
+                .and().authorizeRequests()
+                .anyRequest().authenticated()
                 .and()
                 .formLogin().disable()
 //                .exceptionHandling().accessDeniedPage("/403")
