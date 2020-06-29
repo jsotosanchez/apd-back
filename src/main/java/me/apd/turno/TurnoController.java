@@ -90,7 +90,8 @@ public class TurnoController {
     @PatchMapping("{id}/cancelar")
     @RolesAllowed({"MEDICO", "PACIENTE"})
     public Long cancelarTurno(@PathVariable(name = "id") Long turnoId) {
-        notificationService.send(to, "Se cancelo tu turno subject", "Se cancelo tu turno body");
+        notificationService
+                .send(to, "Healthy - Se ha cancelado tu turno", "Estimado, te escribimos de Healthy para avisarte que se ha cancelado tu turno. Nos pondremos en contacto para darte uno nuevo");
         return turnoService.cancelarTurno(turnoId);
     }
 
