@@ -11,4 +11,5 @@ public class UsuarioView {
     String usuario;
     Long id;
     Collection<String> roles;
+    Boolean pagoAlDia;
 }

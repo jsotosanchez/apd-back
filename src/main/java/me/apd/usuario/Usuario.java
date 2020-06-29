@@ -24,7 +24,7 @@ public class Usuario {
     private String documento;
     private String password;
     private Boolean pagoAlDia;
-    private String matricula;
+    private String role;
     @ManyToMany
     @JoinTable(
             name = "especialidades_de_medico",
