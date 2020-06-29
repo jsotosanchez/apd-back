@@ -17,17 +17,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                .withUser("paciente").password("{noop}password").roles("PACIENTE")
-                .and()
-                .withUser("medico").password("{noop}password").roles("PACIENTE", "MEDICO");
+//        auth.inMemoryAuthentication()
+//                .withUser("paciente").password("{noop}password").roles("PACIENTE")
+//                .and()
+//                .withUser("medico").password("{noop}password").roles("PACIENTE", "MEDICO");
 //
-//        auth.jdbcAuthentication()
-//                .dataSource(dataSource)
-//                .usersByUsernameQuery(
-//                        "select username,password, enabled from users where username=?")
-//                .authoritiesByUsernameQuery(
-//                        "select username, role from user_roles where username=?");
+        auth.jdbcAuthentication()
+                .dataSource(dataSource)
+                .usersByUsernameQuery(
+                        "select documento,password, 1 from usuarios where documento=?")
+                .authoritiesByUsernameQuery(
+                        "select documento, role from usuarios where documento=?");
     }
 
     @Override
