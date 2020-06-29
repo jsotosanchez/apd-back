@@ -88,8 +88,14 @@ public class TurnoController {
     }
 
     @PatchMapping("{id}/cancelar")
-    @RolesAllowed({"MEDICO", "PACIENTE"})
+    @RolesAllowed({"MEDICO", "PACIENTE", "ADMIN"})
     public Long cancelarTurno(@PathVariable(name = "id") Long turnoId) {
+        Turno turno = turnoService.buscarPorId(turnoId).orElseThrow(TurnoNotFoundException::new);
+
+//        buscar id del que hace el request
+        if (turno.getPaciente().getId().equals(1L))
+            return turnoService.cancelarTurno(turnoId);
+//        si el que manda el request no es el paciente
         notificationService
                 .send(to, "Healthy - Se ha cancelado tu turno", "Estimado, te escribimos de Healthy para avisarte que se ha cancelado tu turno. Nos pondremos en contacto para darte uno nuevo");
         return turnoService.cancelarTurno(turnoId);
