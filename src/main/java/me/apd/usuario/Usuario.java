@@ -23,6 +23,7 @@ public class Usuario {
     private String nombre;
     private String documento;
     private String password;
+    @Column(name = "pagoaldia")
     private Boolean pagoAlDia;
     private String role;
     private String contacto;
