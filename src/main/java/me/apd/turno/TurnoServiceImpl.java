@@ -3,6 +3,7 @@ package me.apd.turno;
 import me.apd.especialidad.Especialidad;
 import me.apd.usuario.Usuario;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -62,7 +63,8 @@ public class TurnoServiceImpl implements TurnoService {
         Date dia = Date.valueOf(fecha);
         Date diaSiguiente = new java.sql.Date(dia.getTime() + 24 * 60 * 60 * 1000);
 
-        return turnoRepository.findByMedicoDatesBetween(id, dia, diaSiguiente);
+        List<TurnoMedicoView> byMedicoDatesBetween = turnoRepository.findByMedicoDatesBetween(id, dia, diaSiguiente);
+        return byMedicoDatesBetween;
     }
 
     @Override
@@ -78,12 +80,15 @@ public class TurnoServiceImpl implements TurnoService {
     }
 
     @Override
+    @Transactional
     public void eliminarPorDia(Long id, String fecha) {
 
         Date dia = Date.valueOf(fecha);
         Date diaSiguiente = new java.sql.Date(dia.getTime() + 24 * 60 * 60 * 1000);
+        Timestamp diaTimeStamp = new Timestamp(dia.getTime());
+        Timestamp diaSigTimeStamp = new Timestamp(diaSiguiente.getTime());
 
-        turnoRepository.deleteByMedicoAndDia(id, dia, diaSiguiente);
+        turnoRepository.deleteByMedicoAndDia(id, diaTimeStamp, diaSigTimeStamp);
     }
 
     @Override
