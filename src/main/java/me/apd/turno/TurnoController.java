@@ -7,7 +7,10 @@ import me.apd.push.NotificacionService;
 import me.apd.usuario.Usuario;
 import me.apd.usuario.UsuarioNotFoundException;
 import me.apd.usuario.UsuarioService;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
@@ -29,8 +32,6 @@ public class TurnoController {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     private final EspecialidadService especialidadService;
     private final NotificacionService notificationService;
-    @Value("${twilio.to}")
-    private String to;
 
     public TurnoController(TurnoService agenda, UsuarioService usuarioService, EspecialidadService especialidadService, NotificacionService notificationService) {
         this.turnoService = agenda;
@@ -91,11 +92,20 @@ public class TurnoController {
     @RolesAllowed({"MEDICO", "PACIENTE", "ADMIN"})
     public Long cancelarTurno(@PathVariable(name = "id") Long turnoId) {
         Turno turno = turnoService.buscarPorId(turnoId).orElseThrow(TurnoNotFoundException::new);
+        SecurityContext context = SecurityContextHolder.getContext();
+        Authentication authentication = context.getAuthentication();
+        @SuppressWarnings("Unchecked")
+        UserDetails principal = (UserDetails) authentication.getPrincipal();
+        String documento = principal.getUsername();
+        Usuario usuarioDelRequest = usuarioService.buscarPorDocumento(documento)
+                .orElseThrow(UsuarioNotFoundException::new);
 
-//        buscar id del que hace el request
-        if (turno.getPaciente().getId().equals(1L))
+//        el paciente cancela el turno
+        if (turno.getPaciente().getId().equals(usuarioDelRequest.getId()))
             return turnoService.cancelarTurno(turnoId);
+
 //        si el que manda el request no es el paciente
+        String to = usuarioDelRequest.getContacto();
         notificationService
                 .send(to, "Healthy - Se ha cancelado tu turno", "Estimado, te escribimos de Healthy para avisarte que se ha cancelado tu turno. Nos pondremos en contacto para darte uno nuevo");
         return turnoService.cancelarTurno(turnoId);

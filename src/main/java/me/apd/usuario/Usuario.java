@@ -25,6 +25,7 @@ public class Usuario {
     private String password;
     private Boolean pagoAlDia;
     private String role;
+    private String contacto;
     @ManyToMany
     @JoinTable(
             name = "especialidades_de_medico",
