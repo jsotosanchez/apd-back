@@ -102,7 +102,7 @@ public class TurnoController {
     }
 
     @PatchMapping("{id}/confirmar")
-    @RolesAllowed("PACIENTE")
+    @RolesAllowed({"MEDICO", "PACIENTE"})
     public Long confirmarTurno(@PathVariable Long id) {
         return turnoService.confirmarTurno(id);
     }
