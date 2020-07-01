@@ -63,8 +63,7 @@ public class TurnoServiceImpl implements TurnoService {
         Date dia = Date.valueOf(fecha);
         Date diaSiguiente = new java.sql.Date(dia.getTime() + 24 * 60 * 60 * 1000);
 
-        List<TurnoMedicoView> byMedicoDatesBetween = turnoRepository.findByMedicoDatesBetween(id, dia, diaSiguiente);
-        return byMedicoDatesBetween;
+        return turnoRepository.findByMedicoDatesBetween(id, dia, diaSiguiente);
     }
 
     @Override
@@ -88,7 +87,7 @@ public class TurnoServiceImpl implements TurnoService {
         Timestamp diaTimeStamp = new Timestamp(dia.getTime());
         Timestamp diaSigTimeStamp = new Timestamp(diaSiguiente.getTime());
 
-        turnoRepository.deleteByMedicoAndDia(id, diaTimeStamp, diaSigTimeStamp);
+        turnoRepository.deleteAll(turnoRepository.findByMedicoIdAndHorarioBetween(id, diaTimeStamp, diaSigTimeStamp));
     }
 
     @Override

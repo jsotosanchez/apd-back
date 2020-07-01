@@ -52,9 +52,8 @@ public interface TurnoRepository extends CrudRepository<Turno, Long> {
     @Query("select t from Turno t where t.medico.id = :medicoId and t.horario > :hoy")
     List<DiaMedicoView> findHorariosByMedico(@Param("medicoId") Long id, @Param("hoy") Timestamp hoy);
 
-    @Modifying
-    @Query("delete from Turno t where t.medico.id = :medicoId and t.horario >= :dia and t.horario < :diaSiguiente")
-    void deleteByMedicoAndDia(@Param("medicoId") long id, @Param("dia") Timestamp hoy, @Param("diaSiguiente") Timestamp diaSiguiente);
+
+    Iterable<Turno> findByMedicoIdAndHorarioBetween(@Param("medicoId") long id, @Param("dia") Timestamp hoy, @Param("diaSiguiente") Timestamp diaSiguiente);
 
     @Query("select t from Turno t where t.paciente.id = :pacienteId and t.horario > :fromDate and t.horario < :maxDate")
     List<TurnoPacienteView> findByPacienteAndDia(@Param("pacienteId") Long id, @Param("fromDate") Timestamp from, @Param("maxDate") Timestamp maxDate);
