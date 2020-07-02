@@ -13,7 +13,7 @@ import java.util.HashMap;
 
 @Service
 @ConditionalOnExpression("'${notificacion}'=='email'")
-public class EmailService implements NotificacionService {
+public class EmailServicePush implements PushNotificacionService {
     private static final String API_URL = "https://api:{API_KEY}@api.mailgun.net/v2/{domain}/messages";
     private final String apiKey;
     private final String domain;
@@ -21,7 +21,7 @@ public class EmailService implements NotificacionService {
     private final String server;
     private final RestTemplate restTemplate;
 
-    public EmailService(@Value("mail.apiKey") String apiKey, @Value("mail.domain") String domain, @Value("mail.from") String from, @Value("mail.server") String server, RestTemplate restTemplate) {
+    public EmailServicePush(@Value("mail.apiKey") String apiKey, @Value("mail.domain") String domain, @Value("mail.from") String from, @Value("mail.server") String server, RestTemplate restTemplate) {
         this.apiKey = apiKey;
         this.domain = domain;
         this.from = from;

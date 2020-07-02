@@ -13,13 +13,13 @@ import javax.annotation.PostConstruct;
 @Slf4j
 @Service
 @ConditionalOnExpression("'${notificacion}'=='twilio'")
-public class TwilioService implements NotificacionService {
+public class TwilioServicePush implements PushNotificacionService {
 
     private final String account;
     private final String token;
     private final String from;
 
-    public TwilioService(@Value("${twilio.account}") String account, @Value("${twilio.key}") String token, @Value("${twilio.from}") String from) {
+    public TwilioServicePush(@Value("${twilio.account}") String account, @Value("${twilio.key}") String token, @Value("${twilio.from}") String from) {
         this.account = account;
         this.token = token;
         this.from = from;

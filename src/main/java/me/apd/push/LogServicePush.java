@@ -11,13 +11,13 @@ import javax.annotation.PostConstruct;
 @Slf4j
 @Service
 @ConditionalOnExpression("'${notificacion}'=='log'")
-public class LogService implements NotificacionService {
+public class LogServicePush implements PushNotificacionService {
 
     private final String account;
     private final String token;
     private final String from;
 
-    public LogService(@Value("${twilio.account}") String account, @Value("${twilio.key}") String token, @Value("${twilio.from}") String from) {
+    public LogServicePush(@Value("${twilio.account}") String account, @Value("${twilio.key}") String token, @Value("${twilio.from}") String from) {
         this.account = account;
         this.token = token;
         this.from = from;
