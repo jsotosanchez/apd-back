@@ -18,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -91,6 +92,9 @@ public class TurnoController {
         turnoPacienteViews.forEach(t -> {
             if (t.getEspecialidad().equals(turno.getEspecialidad().getDescripcion())) {
                 throw new EspecialidadRepetidaEnUnDiaException();
+            }
+            if (Timestamp.from(t.getHorario()).equals(turno.getHorario())) {
+                throw new HorarioRepetidoEnUnDiaException();
             }
         });
 
