@@ -19,7 +19,7 @@ public class Notificacion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String mensaje;
-    @Column
+    @Column(columnDefinition = "smallint default false")
     private Boolean leida;
     @OneToOne
     private Usuario usuario;
