@@ -13,7 +13,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
@@ -96,7 +95,6 @@ public class TurnoController {
 
     @PatchMapping("{id}/cancelar")
     @RolesAllowed({"MEDICO", "PACIENTE", "ADMIN"})
-    @Transactional
     public Long cancelarTurno(@PathVariable(name = "id") Long turnoId) {
         Turno turno = turnoService.buscarPorId(turnoId).orElseThrow(TurnoNotFoundException::new);
         SecurityContext context = SecurityContextHolder.getContext();
@@ -116,7 +114,7 @@ public class TurnoController {
         pushNotificacionService
                 .send(to, "Healthy - Se ha cancelado tu turno", NOTIFICACIONBODY);
         notificacionService
-                .crear(Notificacion.builder().mensaje(NOTIFICACIONBODY).leida(false).usuario(turno.getPaciente())
+                .crear(Notificacion.builder().mensaje(NOTIFICACIONBODY).leida(0).usuario(turno.getPaciente())
                         .build());
         return turnoService.cancelarTurno(turnoId);
     }
