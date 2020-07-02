@@ -11,4 +11,7 @@ public interface NotificacionService {
     List<Notificacion> buscarTodas();
 
     List<NotificacionBase> buscarPorUsuario(Long id);
+
+
+    Notificacion crear(Notificacion notificacion);
 }

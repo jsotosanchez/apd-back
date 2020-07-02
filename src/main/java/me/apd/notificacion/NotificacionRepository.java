@@ -12,8 +12,7 @@ import java.util.List;
 @Repository
 public interface NotificacionRepository extends CrudRepository<Notificacion, Long> {
 
-    @Query("select NEW me.apd.notificacion.NotificacionBase(n.id, n.mensaje, n.leida) from Notificacion n where n.leida = 0 and n.usuario.id = :id")
-    List<NotificacionBase> buscarNoLeidaPorUsuario(@Param("id") Long id);
+    List<NotificacionBase> findByUsuarioIdAndLeidaFalse(@Param("id") Long id);
 
     @Modifying
     @Transactional

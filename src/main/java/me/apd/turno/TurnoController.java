@@ -3,7 +3,9 @@ package me.apd.turno;
 import me.apd.especialidad.Especialidad;
 import me.apd.especialidad.EspecialidadNotFoundException;
 import me.apd.especialidad.EspecialidadService;
-import me.apd.push.NotificacionService;
+import me.apd.notificacion.Notificacion;
+import me.apd.notificacion.NotificacionService;
+import me.apd.push.PushNotificacionService;
 import me.apd.usuario.Usuario;
 import me.apd.usuario.UsuarioNotFoundException;
 import me.apd.usuario.UsuarioService;
@@ -11,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
@@ -24,6 +27,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/turnos")
 public class TurnoController {
+    public static final String NOTIFICACIONBODY = "Estimado, te escribimos de Healthy para avisarte que se ha cancelado tu turno. Nos pondremos en contacto para darte uno nuevo";
     private final TurnoService turnoService;
     final DateTimeFormatter formatter = DateTimeFormatter
             .ofPattern("yyyy-MM-dd HH:mm")
@@ -31,13 +35,15 @@ public class TurnoController {
     private final UsuarioService usuarioService;
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     private final EspecialidadService especialidadService;
-    private final NotificacionService notificationService;
+    private final PushNotificacionService pushNotificacionService;
+    private final NotificacionService notificacionService;
 
-    public TurnoController(TurnoService agenda, UsuarioService usuarioService, EspecialidadService especialidadService, NotificacionService notificationService) {
+    public TurnoController(TurnoService agenda, UsuarioService usuarioService, EspecialidadService especialidadService, PushNotificacionService pushNotificacionService, NotificacionService notificacionService) {
         this.turnoService = agenda;
         this.usuarioService = usuarioService;
         this.especialidadService = especialidadService;
-        this.notificationService = notificationService;
+        this.pushNotificacionService = pushNotificacionService;
+        this.notificacionService = notificacionService;
     }
 
     @PostMapping("")
@@ -90,6 +96,7 @@ public class TurnoController {
 
     @PatchMapping("{id}/cancelar")
     @RolesAllowed({"MEDICO", "PACIENTE", "ADMIN"})
+    @Transactional
     public Long cancelarTurno(@PathVariable(name = "id") Long turnoId) {
         Turno turno = turnoService.buscarPorId(turnoId).orElseThrow(TurnoNotFoundException::new);
         SecurityContext context = SecurityContextHolder.getContext();
@@ -106,8 +113,11 @@ public class TurnoController {
 
 //        si el que manda el request no es el paciente
         String to = usuarioDelRequest.getContacto();
-        notificationService
-                .send(to, "Healthy - Se ha cancelado tu turno", "Estimado, te escribimos de Healthy para avisarte que se ha cancelado tu turno. Nos pondremos en contacto para darte uno nuevo");
+        pushNotificacionService
+                .send(to, "Healthy - Se ha cancelado tu turno", NOTIFICACIONBODY);
+        notificacionService
+                .crear(Notificacion.builder().mensaje(NOTIFICACIONBODY).leida(false).usuario(turno.getPaciente())
+                        .build());
         return turnoService.cancelarTurno(turnoId);
     }
 

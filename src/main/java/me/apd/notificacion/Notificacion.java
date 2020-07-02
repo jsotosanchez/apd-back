@@ -19,6 +19,7 @@ public class Notificacion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String mensaje;
+    @Column
     private Boolean leida;
     @OneToOne
     private Usuario usuario;
