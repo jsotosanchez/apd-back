@@ -1,5 +1,7 @@
 package me.apd.turno;
 
+import me.apd.coladeespera.ColaDeEspera;
+import me.apd.coladeespera.ColaDeEsperaService;
 import me.apd.especialidad.Especialidad;
 import me.apd.especialidad.EspecialidadNotFoundException;
 import me.apd.especialidad.EspecialidadService;
@@ -36,13 +38,15 @@ public class TurnoController {
     private final EspecialidadService especialidadService;
     private final PushNotificacionService pushNotificacionService;
     private final NotificacionService notificacionService;
+    private final ColaDeEsperaService colaDeEsperaService;
 
-    public TurnoController(TurnoService agenda, UsuarioService usuarioService, EspecialidadService especialidadService, PushNotificacionService pushNotificacionService, NotificacionService notificacionService) {
+    public TurnoController(TurnoService agenda, UsuarioService usuarioService, EspecialidadService especialidadService, PushNotificacionService pushNotificacionService, NotificacionService notificacionService, ColaDeEsperaService colaDeEsperaService) {
         this.turnoService = agenda;
         this.usuarioService = usuarioService;
         this.especialidadService = especialidadService;
         this.pushNotificacionService = pushNotificacionService;
         this.notificacionService = notificacionService;
+        this.colaDeEsperaService = colaDeEsperaService;
     }
 
     @PostMapping("")
@@ -106,8 +110,16 @@ public class TurnoController {
                 .orElseThrow(UsuarioNotFoundException::new);
 
 //        el paciente cancela el turno
-        if (turno.getPaciente().getId().equals(usuarioDelRequest.getId()))
+        if (turno.getPaciente().getId().equals(usuarioDelRequest.getId())) {
+            Optional<ColaDeEspera> colaOptional = colaDeEsperaService
+                    .buscar(turno.getEspecialidad().getId(), turno.getMedico().getId());
+            if (colaOptional.isPresent()) {
+                ColaDeEspera cola = colaOptional.get();
+                colaDeEsperaService.delete(cola);
+                return turnoService.reservarTurno(cola.getPacienteId(), turno.getId());
+            }
             return turnoService.cancelarTurno(turnoId);
+        }
 
 //        si el que manda el request no es el paciente
         String to = usuarioDelRequest.getContacto();
