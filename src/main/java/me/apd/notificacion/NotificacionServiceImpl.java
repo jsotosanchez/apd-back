@@ -32,7 +32,7 @@ public class NotificacionServiceImpl implements NotificacionService {
 
     @Override
     public List<NotificacionBase> buscarPorUsuario(Long id) {
-        return repository.findByUsuarioIdAndLeida(id, 0);
+        return repository.findByUsuarioIdAndLeidaFalse(id);
     }
 
     @Override

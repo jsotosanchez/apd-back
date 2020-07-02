@@ -114,7 +114,7 @@ public class TurnoController {
         pushNotificacionService
                 .send(to, "Healthy - Se ha cancelado tu turno", NOTIFICACIONBODY);
         notificacionService
-                .crear(Notificacion.builder().mensaje(NOTIFICACIONBODY).leida(0).usuario(turno.getPaciente())
+                .crear(Notificacion.builder().mensaje(NOTIFICACIONBODY).leida(false).usuario(turno.getPaciente())
                         .build());
         return turnoService.cancelarTurno(turnoId);
     }

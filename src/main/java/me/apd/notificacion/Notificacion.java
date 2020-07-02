@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import me.apd.usuario.Usuario;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 
@@ -19,7 +20,8 @@ public class Notificacion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String mensaje;
-    private Integer leida;
+    @Type(type = "yes_no")
+    private Boolean leida;
     @OneToOne
     private Usuario usuario;
 }
