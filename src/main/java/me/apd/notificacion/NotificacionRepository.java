@@ -16,7 +16,7 @@ public interface NotificacionRepository extends CrudRepository<Notificacion, Lon
 
     @Modifying
     @Transactional
-    @Query("update Notificacion n set n.leida = Y where n.id = :id")
+    @Query("update Notificacion n set n.leida = true where n.id = :id")
     void marcarLeida(@Param("id") Long id);
 
 }
