@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import me.apd.especialidad.Especialidad;
 import me.apd.usuario.Usuario;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -21,6 +22,7 @@ public class Turno {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Timestamp horario;
+    @Type(type = "yes_no")
     private Boolean confirmado;
     @ManyToOne
     private Usuario medico;
