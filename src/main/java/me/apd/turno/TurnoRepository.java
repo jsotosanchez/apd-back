@@ -25,7 +25,8 @@ public interface TurnoRepository extends CrudRepository<Turno, Long> {
     @Query("select t from Turno t " +
             "where t.especialidad.id = :especialidadId and" +
             " t.horario > :hoy and" +
-            " t.paciente.id = null")
+            " t.paciente.id = null" +
+            " order by t.horario")
     List<TurnoDisponibleView> findByDisponibleEspecialidad(@Param("especialidadId") Long especialidadId, @Param("hoy") Timestamp hoy);
 
     @Modifying
@@ -43,7 +44,7 @@ public interface TurnoRepository extends CrudRepository<Turno, Long> {
     @Query("update Turno t set t.paciente.id = null where t.id = :turnoId")
     void cancelarTurno(@Param("turnoId") Long turnoId);
 
-    @Query("select t from Turno t where t.paciente.id = :pacienteId and t.horario > :hoy")
+    @Query("select t from Turno t where t.paciente.id = :pacienteId and t.horario > :hoy order by t.horario")
     List<TurnoPacienteView> findByPaciente(@Param("pacienteId") long pacienteId, @Param("hoy") Timestamp hoy);
 
     @Query("select t from Turno t left join t.paciente where t.medico.id = :medicoId and t.horario > :dia and t.horario < :diaSiguiente")
