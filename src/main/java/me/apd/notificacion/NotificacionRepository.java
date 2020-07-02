@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface NotificacionRepository extends CrudRepository<Notificacion, Long> {
 
-    List<NotificacionBase> findByUsuarioIdAndLeidaFalse(@Param("id") Long id);
+    List<NotificacionBase> findByUsuarioIdAndLeida(@Param("id") Long id, @Param("leida") Integer leida);
 
     @Modifying
     @Transactional
